@@ -6,16 +6,18 @@ namespace NbtLib
 {
     public class NbtParser
     {
-        public NbtCompoundTag ParseFileData(Stream stream)
+        public NbtCompoundTag ParseNbtStream(Stream stream)
         {
-            using (var byteStream = new MemoryStream())
+            using (var decompressionStream = new GZipStream(stream, CompressionMode.Decompress))
             {
-                using (var decompressionStream = new GZipStream(stream, CompressionMode.Decompress))
-                {
-                    var rootTag = (NbtCompoundTag)ParseNamedTag(decompressionStream);
-                    return rootTag;
-                }
+                return ParseUncompressedNbtStream(decompressionStream);
             }
+        }
+
+        public NbtCompoundTag ParseUncompressedNbtStream(Stream stream)
+        {
+            var rootTag = (NbtCompoundTag)ParseNamedTag(stream);
+            return rootTag;
         }
 
         private byte[] ReadBytes(Stream stream, int length)

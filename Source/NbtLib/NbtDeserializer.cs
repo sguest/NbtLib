@@ -10,7 +10,7 @@ namespace NbtLib
         public T DeserializeObject<T>(Stream stream)
         {
             var parser = new NbtParser();
-            var parsed = parser.ParseFileData(stream);
+            var parsed = parser.ParseNbtStream(stream);
 
             return (T)ParseNbtValue(parsed, typeof(T));
         }
