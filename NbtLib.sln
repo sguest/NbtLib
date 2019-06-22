@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NbtLib", "NbtLib\NbtLib.csproj", "{999E6EC5-F0C7-4C5B-A78C-16D6A12FE659}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NbtLib", "Source\NbtLib\NbtLib.csproj", "{999E6EC5-F0C7-4C5B-A78C-16D6A12FE659}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
