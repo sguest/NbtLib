@@ -32,7 +32,7 @@ namespace NbtLib
             {
                 Array.Reverse(bytes);
             }
-            return BitConverter.ToInt16(bytes);
+            return BitConverter.ToInt16(bytes, 0);
         }
 
         private int ReadInt(Stream stream)
@@ -43,7 +43,7 @@ namespace NbtLib
                 Array.Reverse(bytes);
             }
 
-            return BitConverter.ToInt32(bytes);
+            return BitConverter.ToInt32(bytes, 0 );
         }
 
         private long ReadLong(Stream stream)
@@ -54,7 +54,7 @@ namespace NbtLib
                 Array.Reverse(bytes);
             }
 
-            return BitConverter.ToInt64(bytes);
+            return BitConverter.ToInt64(bytes, 0);
         }
 
         private float ReadFloat(Stream stream)
@@ -65,7 +65,7 @@ namespace NbtLib
                 Array.Reverse(bytes);
             }
 
-            return BitConverter.ToSingle(bytes);
+            return BitConverter.ToSingle(bytes, 0);
         }
 
         private double ReadDouble(Stream stream)
@@ -76,7 +76,7 @@ namespace NbtLib
                 Array.Reverse(bytes);
             }
 
-            return BitConverter.ToDouble(bytes);
+            return BitConverter.ToDouble(bytes, 0);
         }
 
         private string ReadString(Stream stream)
@@ -177,9 +177,10 @@ namespace NbtLib
 
         private NbtListTag ParseListTag(Stream stream)
         {
-            var tag = new NbtListTag();
-
-            tag.ItemType = (NbtTagType)stream.ReadByte();
+            var tag = new NbtListTag
+            {
+                ItemType = (NbtTagType)stream.ReadByte()
+            };
             int length = ReadInt(stream);
 
             for(var i = 0; i < length; i++)
