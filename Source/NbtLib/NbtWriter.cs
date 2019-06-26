@@ -135,10 +135,12 @@ namespace NbtLib
             }
             else if(tag is NbtByteArrayTag byteArrayTag)
             {
+                WriteInt(stream, byteArrayTag.Payload.Length);
                 stream.Write(byteArrayTag.Payload, 0, byteArrayTag.Payload.Length);
             }
             else if(tag is NbtIntArrayTag intArrayTag)
             {
+                WriteInt(stream, intArrayTag.Payload.Length);
                 foreach (var item in intArrayTag.Payload)
                 {
                     WriteInt(stream, item);
@@ -146,6 +148,7 @@ namespace NbtLib
             }
             else if(tag is NbtLongArrayTag longArrayTag)
             {
+                WriteInt(stream, longArrayTag.Payload.Length);
                 foreach (var item in longArrayTag.Payload)
                 {
                     WriteLong(stream, item);
