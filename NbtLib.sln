@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NbtLib", "Source\NbtLib\NbtLib.csproj", "{999E6EC5-F0C7-4C5B-A78C-16D6A12FE659}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NbtLib", "Source\NbtLib\NbtLib.csproj", "{999E6EC5-F0C7-4C5B-A78C-16D6A12FE659}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{31C21A71-79B0-4718-96FE-AFDC265B4998}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NbtLib.Tests", "Tests\NbtLib.Tests\NbtLib.Tests.csproj", "{DDFCE4B5-4656-49A3-A3C9-9F71C0B68D66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +19,16 @@ Global
 		{999E6EC5-F0C7-4C5B-A78C-16D6A12FE659}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{999E6EC5-F0C7-4C5B-A78C-16D6A12FE659}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{999E6EC5-F0C7-4C5B-A78C-16D6A12FE659}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDFCE4B5-4656-49A3-A3C9-9F71C0B68D66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDFCE4B5-4656-49A3-A3C9-9F71C0B68D66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDFCE4B5-4656-49A3-A3C9-9F71C0B68D66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDFCE4B5-4656-49A3-A3C9-9F71C0B68D66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DDFCE4B5-4656-49A3-A3C9-9F71C0B68D66} = {31C21A71-79B0-4718-96FE-AFDC265B4998}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {642971B8-C37C-4DE6-BDD3-E73A0CFDCFDD}
