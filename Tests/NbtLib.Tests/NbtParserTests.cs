@@ -19,6 +19,24 @@ namespace NbtLib.Tests
         }
 
         [Fact]
+        public void ParseNbtStream_ShouldReadPrimitiveTypes()
+        {
+            using (var fileStream = System.IO.File.OpenRead(@"TestData\primitives.nbt"))
+            {
+                var parser = new NbtParser();
+                var parsed = parser.ParseNbtStream(fileStream);
+
+                Assert.Equal(-2, (parsed.ChildTags["Byte Tag"] as NbtByteTag).Payload);
+                Assert.Equal(11234, (parsed.ChildTags["Short Tag"] as NbtShortTag).Payload);
+                Assert.Equal(581248567, (parsed.ChildTags["Int Tag"] as NbtIntTag).Payload);
+                Assert.Equal(5816518613524685468, (parsed.ChildTags["Long Tag"] as NbtLongTag).Payload);
+                Assert.Equal(3.14159F, (parsed.ChildTags["Float Tag"] as NbtFloatTag).Payload);
+                Assert.Equal(66518181.2168181, (parsed.ChildTags["Double Tag"] as NbtDoubleTag).Payload);
+                Assert.Equal("It's a string", (parsed.ChildTags["String Tag"] as NbtStringTag).Payload);
+            }
+        }
+
+        [Fact]
         public void ParseNbtStream_ShouldReadArrayTypes()
         {
             using (var fileStream = System.IO.File.OpenRead(@"TestData\arrays.nbt"))

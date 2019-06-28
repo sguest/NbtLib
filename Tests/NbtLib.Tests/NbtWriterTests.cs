@@ -27,6 +27,32 @@ namespace NbtLib.Tests
         }
 
         [Fact]
+        public void CreateNbtStream_ShouldWritePrimitiveTypes()
+        {
+            var testData = new NbtCompoundTag()
+            {
+                Name = "Root Tag",
+            };
+
+            testData.ChildTags.Add("Byte Tag", new NbtByteTag { Name = "Byte Tag", Payload = -2 });
+            testData.ChildTags.Add("Short Tag", new NbtShortTag { Name = "Short Tag", Payload = 11234 });
+            testData.ChildTags.Add("Int Tag", new NbtIntTag { Name = "Int Tag", Payload = 581248567 });
+            testData.ChildTags.Add("Long Tag", new NbtLongTag { Name = "Long Tag", Payload = 5816518613524685468 });
+            testData.ChildTags.Add("Float Tag", new NbtFloatTag { Name = "Float Tag", Payload = 3.14159F });
+            testData.ChildTags.Add("Double Tag", new NbtDoubleTag { Name = "Double Tag", Payload = 66518181.2168181 });
+            testData.ChildTags.Add("String Tag", new NbtStringTag { Name = "String Tag", Payload = "It's a string" });
+            var writer = new NbtWriter();
+
+            using (var outputStream = writer.CreateNbtStream(testData))
+            {
+                using (var fileStream = System.IO.File.OpenRead(@"TestData\primitives.nbt"))
+                {
+                    Assert.True(TestHelpers.StreamsEqual(outputStream, fileStream));
+                }
+            }
+        }
+
+        [Fact]
         public void CreateNbtStream_ShouldWriteArrayTypes()
         {
             var testData = new NbtCompoundTag()
