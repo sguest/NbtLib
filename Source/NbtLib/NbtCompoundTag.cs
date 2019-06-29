@@ -19,9 +19,21 @@ namespace NbtLib
 
         public bool IsReadOnly => false;
 
-        public void Add(string key, NbtTag value) => ChildTags.Add(key, value);
+        public void Add(string key, NbtTag value)
+        {
+            if(string.IsNullOrEmpty(value.Name))
+            {
+                value.Name = key;
+            }
 
-        public void Add(KeyValuePair<string, NbtTag> item) => ChildTags.Add(item);
+            if(!key.Equals(value.Name))
+            {
+                throw new System.InvalidOperationException($"Error adding NBT tag with name {value.Name} to compound tag under key {key}");
+            }
+            ChildTags.Add(key, value);
+        }
+
+        public void Add(KeyValuePair<string, NbtTag> item) => Add(item.Key, item.Value);
 
         public void Clear() => ChildTags.Clear();
 

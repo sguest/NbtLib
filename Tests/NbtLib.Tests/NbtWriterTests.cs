@@ -12,7 +12,7 @@ namespace NbtLib.Tests
                 Name = "Root Tag",
             };
 
-            testData.Add("List", new NbtIntTag { Name = "Int 5", Payload = 5 });
+            testData.Add("Int 5", new NbtIntTag { Name = "Int 5", Payload = 5 });
             testData.Add("String abcd", new NbtStringTag { Name = "String abcd", Payload = "abcd" });
 
             var writer = new NbtWriter();
