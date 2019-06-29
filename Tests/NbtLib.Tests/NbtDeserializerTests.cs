@@ -1,4 +1,5 @@
 ﻿using NbtLib.Tests.Serialization;
+using System.Collections.Generic;
 using Xunit;
 
 namespace NbtLib.Tests
@@ -15,6 +16,32 @@ namespace NbtLib.Tests
 
                 Assert.Equal(5, obj.Int5);
                 Assert.Equal("abcd", obj.StringAbcd);
+            }
+        }
+
+        [Fact]
+        public void DeserializeObject_ShouldParseToDictionary()
+        {
+            using (var fileStream = System.IO.File.OpenRead(@"TestData\simple.nbt"))
+            {
+                var deserializer = new NbtDeserializer();
+                var obj = deserializer.DeserializeObject<IDictionary<string, object>>(fileStream);
+
+                Assert.Equal(5, obj["Int 5"]);
+                Assert.Equal("abcd", obj["String abcd"]);
+            }
+        }
+
+        [Fact]
+        public void DeserializeObject_ShouldParseToIDictionary()
+        {
+            using (var fileStream = System.IO.File.OpenRead(@"TestData\simple.nbt"))
+            {
+                var deserializer = new NbtDeserializer();
+                var obj = deserializer.DeserializeObject<Dictionary<string, object>>(fileStream);
+
+                Assert.Equal(5, obj["Int 5"]);
+                Assert.Equal("abcd", obj["String abcd"]);
             }
         }
 
@@ -118,6 +145,19 @@ namespace NbtLib.Tests
                 Assert.Equal(12345, obj.CompoundChild.IntTag);
                 Assert.Equal(123, obj.ListChild[0].Float);
                 Assert.Equal(456, obj.ListChild[1].Float);
+            }
+        }
+
+        [Fact]
+        public void DeserializeObject_ShouldReadNestedDictionary()
+        {
+            using (var fileStream = System.IO.File.OpenRead(@"TestData\nested.nbt"))
+            {
+                var deserializer = new NbtDeserializer();
+                var obj = deserializer.DeserializeObject<NestedDictionaryObject>(fileStream);
+
+                Assert.Equal(123, obj.ListChild[0]["Float"]);
+                Assert.Equal(456, obj.ListChild[1]["Float"]);
             }
         }
     }

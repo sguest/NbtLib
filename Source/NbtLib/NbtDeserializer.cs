@@ -21,11 +21,17 @@ namespace NbtLib
         {
             if (tag is NbtCompoundTag compoundTag)
             {
-                var obj = Activator.CreateInstance(targetType);
 
                 var dictionaryTypes = GetDictionaryGenericTypes(targetType);
                 if (dictionaryTypes == null)
                 {
+                    if(targetType.IsInterface)
+                    {
+                        return null;
+                    }
+
+                    var obj = Activator.CreateInstance(targetType);
+
                     foreach (var childTag in compoundTag)
                     {
                         var propName = childTag.Key.Replace(" ", "");
@@ -35,20 +41,34 @@ namespace NbtLib
                             info.SetValue(obj, ParseNbtValue(childTag.Value, info.PropertyType));
                         }
                     }
+
+                    return obj;
                 }
                 else
                 {
                     if (dictionaryTypes[0] != typeof(string))
                     {
-                        throw new Exception("Can only deserialize objects with string keys");
+                        return null;
                     }
+
+                    object dictionary;
+                    if(targetType.IsInterface)
+                    {
+                        var dictionaryType = typeof(Dictionary<,>).MakeGenericType(dictionaryTypes);
+                        dictionary = Activator.CreateInstance(dictionaryType);
+                    }
+                    else
+                    {
+                        dictionary = Activator.CreateInstance(targetType);
+                    }
+
                     foreach (var childTag in compoundTag)
                     {
-                        targetType.InvokeMember("Add", BindingFlags.InvokeMethod, null, obj, new[] { childTag.Key, ParseNbtValue(childTag.Value, dictionaryTypes[1]) });
+                        targetType.InvokeMember("Add", BindingFlags.InvokeMethod, null, dictionary, new[] { childTag.Key, ParseNbtValue(childTag.Value, dictionaryTypes[1]) });
                     }
-                }
 
-            return obj;
+                    return dictionary;
+                }
             }
             else if (tag is NbtByteTag byteTag)
             {
@@ -102,7 +122,7 @@ namespace NbtLib
                 }
             }
 
-            throw new Exception($"Unable to deserialize tag of type {tag.TagType} to type {targetType}");
+            return null;
         }
 
         private object MapToCollection(IEnumerable collection, Type genericType, Type targetType)
@@ -155,7 +175,7 @@ namespace NbtLib
 
         private Type[] GetDictionaryGenericTypes(Type dictionaryType)
         {
-            foreach (Type interfaceType in dictionaryType.GetInterfaces())
+            foreach (Type interfaceType in dictionaryType.GetInterfaces().Union(new Type[] { dictionaryType }))
             {
                 if (interfaceType.IsGenericType &&
                     interfaceType.GetGenericTypeDefinition()
