@@ -179,10 +179,7 @@ namespace NbtLib
 
         private NbtListTag ParseListTag(Stream stream)
         {
-            var tag = new NbtListTag
-            {
-                ItemType = (NbtTagType)stream.ReadByte()
-            };
+            var tag = new NbtListTag((NbtTagType)stream.ReadByte());
             int length = ReadInt(stream);
 
             for(var i = 0; i < length; i++)

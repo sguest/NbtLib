@@ -82,19 +82,19 @@ namespace NbtLib.Tests
                 Name = "Root Tag",
             };
 
-            var stringList = new NbtListTag { Name = "String List", ItemType = NbtTagType.String };
+            var stringList = new NbtListTag(NbtTagType.String) { Name = "String List" };
             stringList.Add(new NbtStringTag { Payload = "Alpha" });
             stringList.Add(new NbtStringTag { Payload = "Beta" });
             stringList.Add(new NbtStringTag { Payload = "Gamma" });
             stringList.Add(new NbtStringTag { Payload = "Delta" });
 
-            var intList = new NbtListTag { Name = "Int List", ItemType = NbtTagType.Int };
+            var intList = new NbtListTag(NbtTagType.Int) { Name = "Int List" };
             intList.Add(new NbtIntTag { Payload = 19 });
             intList.Add(new NbtIntTag { Payload = 5 });
             intList.Add(new NbtIntTag { Payload = 23 });
             intList.Add(new NbtIntTag { Payload = 9982 });
 
-            var endList = new NbtListTag { Name = "End List", ItemType = NbtTagType.End };
+            var endList = new NbtListTag(NbtTagType.End) { Name = "End List" };
 
             testData.ChildTags.Add("String List", stringList);
             testData.ChildTags.Add("Int List", intList);
