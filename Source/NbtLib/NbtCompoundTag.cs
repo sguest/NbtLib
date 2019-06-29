@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NbtLib
 {
-    public class NbtCompoundTag : NbtTag, IDictionary<string, NbtTag>
+    public class NbtCompoundTag : NbtTag, IDictionary<string, NbtTag>, IEquatable<NbtCompoundTag>
     {
         public NbtTag this[string key] { get => ChildTags[key]; set => Add(key, value); }
 
@@ -40,5 +42,22 @@ namespace NbtLib
         public bool TryGetValue(string key, out NbtTag value) => ChildTags.TryGetValue(key, out value);
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public override bool Equals(object obj)
+        {
+            if (obj is NbtCompoundTag compoundTag)
+            {
+                return Equals(compoundTag);
+            }
+
+            return base.Equals(obj);
+        }
+
+        public bool Equals(NbtCompoundTag other) => this.SequenceEqual(other);
+
+        public override int GetHashCode()
+        {
+            return -2086293992 + EqualityComparer<IDictionary<string, NbtTag>>.Default.GetHashCode(ChildTags);
+        }
     }
 }

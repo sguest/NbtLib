@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NbtLib
 {
-    public class NbtListTag : NbtTag, IList<NbtTag>
+    public class NbtListTag : NbtTag, IList<NbtTag>, IEquatable<NbtListTag>
     {
         public NbtListTag(NbtTagType itemType)
         {
@@ -53,5 +55,26 @@ namespace NbtLib
         public void RemoveAt(int index) => ChildTags.RemoveAt(index);
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public override bool Equals(object obj)
+        {
+            if(obj is NbtListTag listTag)
+            {
+                return Equals(listTag);
+            }
+
+            return base.Equals(obj);
+        }
+
+        public bool Equals(NbtListTag other) => this.SequenceEqual(other);
+
+        public override int GetHashCode()
+        {
+            var hashCode = 562106404;
+            hashCode = hashCode * -1521134295 + ItemType.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<IList<NbtTag>>.Default.GetHashCode(ChildTags);
+            hashCode = hashCode * -1521134295 + Count.GetHashCode();
+            return hashCode;
+        }
     }
 }
