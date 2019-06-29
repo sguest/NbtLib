@@ -10,7 +10,7 @@ namespace NbtLib.Tests
         {
             var list = new NbtListTag(NbtTagType.Int);
 
-            Assert.Throws<InvalidOperationException>(() => list.Add(new NbtStringTag()));
+            Assert.Throws<InvalidOperationException>(() => list.Add(new NbtStringTag("Invalid")));
         }
 
         [Fact]
@@ -18,7 +18,7 @@ namespace NbtLib.Tests
         {
             var list = new NbtListTag(NbtTagType.Int);
 
-            Assert.Throws<InvalidOperationException>(() => list.Insert(0, new NbtStringTag()));
+            Assert.Throws<InvalidOperationException>(() => list.Insert(0, new NbtStringTag("Invalid")));
         }
     }
 }

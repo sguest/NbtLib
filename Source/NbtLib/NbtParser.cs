@@ -110,22 +110,22 @@ namespace NbtLib
                 case NbtTagType.Compound:
                     return ParseCompoundTag(stream);
                 case NbtTagType.Byte:
-                    return new NbtByteTag() { Payload = (sbyte)stream.ReadByte() };
+                    return new NbtByteTag((sbyte)stream.ReadByte());
                 case NbtTagType.Short:
-                    return new NbtShortTag() { Payload = ReadShort(stream) };
+                    return new NbtShortTag(ReadShort(stream));
                 case NbtTagType.Int:
-                    return new NbtIntTag() { Payload = ReadInt(stream) };
+                    return new NbtIntTag(ReadInt(stream));
                 case NbtTagType.Long:
-                    return new NbtLongTag() { Payload = ReadLong(stream) };
+                    return new NbtLongTag(ReadLong(stream));
                 case NbtTagType.Float:
-                    return new NbtFloatTag() { Payload = ReadFloat(stream) };
+                    return new NbtFloatTag(ReadFloat(stream));
                 case NbtTagType.Double:
-                    return new NbtDoubleTag() { Payload = ReadDouble(stream) };
+                    return new NbtDoubleTag(ReadDouble(stream));
                 case NbtTagType.String:
-                    return new NbtStringTag() { Payload = ReadString(stream) };
+                    return new NbtStringTag(ReadString(stream));
                 case NbtTagType.ByteArray:
                     var length = ReadInt(stream);
-                    return new NbtByteArrayTag() { Payload = ReadBytes(stream, length) };
+                    return new NbtByteArrayTag(ReadBytes(stream, length));
                 case NbtTagType.IntArray:
                     return ParseIntArray(stream);
                 case NbtTagType.LongArray:
@@ -162,7 +162,7 @@ namespace NbtLib
             {
                 payload[i] = ReadInt(stream);
             }
-            return new NbtIntArrayTag() { Payload = payload };
+            return new NbtIntArrayTag(payload);
         }
 
         private NbtLongArrayTag ParseLongArray(Stream stream)
@@ -174,7 +174,7 @@ namespace NbtLib
             {
                 payload[i] = ReadLong(stream);
             }
-            return new NbtLongArrayTag() { Payload = payload };
+            return new NbtLongArrayTag(payload);
         }
 
         private NbtListTag ParseListTag(Stream stream)

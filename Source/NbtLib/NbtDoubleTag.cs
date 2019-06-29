@@ -2,7 +2,12 @@
 {
     public class NbtDoubleTag : NbtTag
     {
+        public NbtDoubleTag(double payload)
+        {
+            Payload = payload;
+        }
+
         public override NbtTagType TagType => NbtTagType.Double;
-        public double Payload { get; set; }
+        public double Payload { get; }
     }
 }
