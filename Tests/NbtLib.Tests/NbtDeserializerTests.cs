@@ -186,5 +186,17 @@ namespace NbtLib.Tests
                 Assert.False(obj.ContainsKey("String abcd"));
             }
         }
+
+        [Fact]
+        public void DeserializeObject_ShouldIgnoreByAttribute()
+        {
+            using (var fileStream = System.IO.File.OpenRead(@"TestData\simple.nbt"))
+            {
+                var deserializer = new NbtDeserializer();
+                var obj = deserializer.DeserializeObject<AttributesObject>(fileStream);
+
+                Assert.Equal(default(int), obj.Int5);
+            }
+        }
     }
 }

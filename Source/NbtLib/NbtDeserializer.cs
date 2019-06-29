@@ -38,10 +38,13 @@ namespace NbtLib
                         var info = targetType.GetProperty(propName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                         if (info != null)
                         {
-                            var value = ParseNbtValue(childTag.Value, info.PropertyType);
-                            if(info.PropertyType.IsAssignableFrom(value.GetType()))
+                            if(!Attribute.IsDefined(info, typeof(NbtIgnoreAttribute)))
                             {
-                                info.SetValue(obj, value);
+                                var value = ParseNbtValue(childTag.Value, info.PropertyType);
+                                if (info.PropertyType.IsAssignableFrom(value.GetType()))
+                                {
+                                    info.SetValue(obj, value);
+                                }
                             }
                         }
                     }
