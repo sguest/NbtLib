@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace NbtLib
 {
-    class NbtDeserializer
+    public class NbtDeserializer
     {
         public T DeserializeObject<T>(Stream stream)
         {
@@ -26,7 +26,8 @@ namespace NbtLib
                 {
                     foreach (var childTag in compoundTag)
                     {
-                        var info = targetType.GetProperty(childTag.Key, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+                        var propName = childTag.Key.Replace(" ", "");
+                        var info = targetType.GetProperty(propName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                         if (info != null)
                         {
                             info.SetValue(obj, ParseNbtValue(childTag.Value, info.PropertyType));

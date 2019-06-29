@@ -33,5 +33,11 @@ namespace NbtLib
             var writer = new NbtWriter();
             return writer.CreateUncompressedNbtStream(rootTag, rootTagName);
         }
+
+        public static T DeserializeObject<T>(Stream stream)
+        {
+            var deserializer = new NbtDeserializer();
+            return deserializer.DeserializeObject<T>(stream);
+        }
     }
 }
