@@ -5,25 +5,26 @@ using System.Linq;
 
 namespace NbtLib
 {
-    public class NbtListTag : NbtTag, IList<NbtTag>, IEquatable<NbtListTag>
+    public class NbtListTag : INbtTag<IReadOnlyCollection<INbtTag>>, IList<INbtTag>, IEquatable<NbtListTag>
     {
         public NbtListTag(NbtTagType itemType)
         {
             ItemType = itemType;
         }
 
-        public NbtTag this[int index] { get => ChildTags[index]; set => Insert(index, value); }
+        public INbtTag this[int index] { get => ChildTags[index]; set => Insert(index, value); }
+        public IReadOnlyCollection<INbtTag> Payload => ChildTags.AsReadOnly();
 
-        public override NbtTagType TagType => NbtTagType.List;
+        public NbtTagType TagType => NbtTagType.List;
         public NbtTagType ItemType { get; }
 
-        private IList<NbtTag> ChildTags { get; set; } = new List<NbtTag>();
+        private List<INbtTag> ChildTags { get; set; } = new List<INbtTag>();
 
         public int Count => this.ChildTags.Count;
 
         public bool IsReadOnly => false;
 
-        public void Add(NbtTag item) {
+        public void Add(INbtTag item) {
             if(item.TagType != ItemType)
             {
                 throw new System.InvalidOperationException($"Unable to insert tag of type {item.TagType} into list of type {ItemType}");
@@ -33,15 +34,15 @@ namespace NbtLib
 
         public void Clear() => ChildTags.Clear();
 
-        public bool Contains(NbtTag item) => ChildTags.Contains(item);
+        public bool Contains(INbtTag item) => ChildTags.Contains(item);
 
-        public void CopyTo(NbtTag[] array, int arrayIndex) => ChildTags.CopyTo(array, arrayIndex);
+        public void CopyTo(INbtTag[] array, int arrayIndex) => ChildTags.CopyTo(array, arrayIndex);
 
-        public IEnumerator<NbtTag> GetEnumerator() => ChildTags.GetEnumerator();
+        public IEnumerator<INbtTag> GetEnumerator() => ChildTags.GetEnumerator();
 
-        public int IndexOf(NbtTag item) => ChildTags.IndexOf(item);
+        public int IndexOf(INbtTag item) => ChildTags.IndexOf(item);
 
-        public void Insert(int index, NbtTag item)
+        public void Insert(int index, INbtTag item)
         {
             if (item.TagType != ItemType)
             {
@@ -50,7 +51,7 @@ namespace NbtLib
             ChildTags.Insert(index, item);
         }
 
-        public bool Remove(NbtTag item) => ChildTags.Remove(item);
+        public bool Remove(INbtTag item) => ChildTags.Remove(item);
 
         public void RemoveAt(int index) => ChildTags.RemoveAt(index);
 
@@ -72,7 +73,7 @@ namespace NbtLib
         {
             var hashCode = 562106404;
             hashCode = hashCode * -1521134295 + ItemType.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<IList<NbtTag>>.Default.GetHashCode(ChildTags);
+            hashCode = hashCode * -1521134295 + EqualityComparer<IList<INbtTag>>.Default.GetHashCode(ChildTags);
             hashCode = hashCode * -1521134295 + Count.GetHashCode();
             return hashCode;
         }

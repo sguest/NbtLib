@@ -2,9 +2,9 @@
 
 namespace NbtLib
 {
-    public class NbtEndTag : NbtTag, IEquatable<NbtEndTag>
+    public struct NbtEndTag : INbtTag, IEquatable<NbtEndTag>
     {
-        public override NbtTagType TagType => NbtTagType.End;
+        public NbtTagType TagType => NbtTagType.End;
 
         public override bool Equals(object obj)
         {

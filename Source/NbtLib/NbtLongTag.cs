@@ -2,14 +2,14 @@
 
 namespace NbtLib
 {
-    public class NbtLongTag : NbtTag, IEquatable<NbtLongTag>
+    public struct NbtLongTag : INbtTag<long>, IEquatable<NbtLongTag>
     {
         public NbtLongTag(long payload)
         {
             Payload = payload;
         }
 
-        public override NbtTagType TagType => NbtTagType.Long;
+        public NbtTagType TagType => NbtTagType.Long;
         public long Payload { get; }
 
         public override bool Equals(object obj)

@@ -2,14 +2,14 @@
 
 namespace NbtLib
 {
-    public class NbtDoubleTag : NbtTag, IEquatable<NbtDoubleTag>
+    public struct NbtDoubleTag : INbtTag<double>, IEquatable<NbtDoubleTag>
     {
         public NbtDoubleTag(double payload)
         {
             Payload = payload;
         }
 
-        public override NbtTagType TagType => NbtTagType.Double;
+        public NbtTagType TagType => NbtTagType.Double;
         public double Payload { get; }
 
         public override bool Equals(object obj)

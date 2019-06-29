@@ -13,8 +13,8 @@ namespace NbtLib.Tests
                 var parser = new NbtParser();
                 var parsed = parser.ParseNbtStream(fileStream);
 
-                Assert.Equal(5, (parsed["Int 5"] as NbtIntTag).Payload);
-                Assert.Equal("abcd", (parsed["String abcd"] as NbtStringTag).Payload);
+                Assert.Equal(5, ((NbtIntTag)parsed["Int 5"]).Payload);
+                Assert.Equal("abcd", ((NbtStringTag)parsed["String abcd"]).Payload);
             }
         }
 
@@ -26,13 +26,13 @@ namespace NbtLib.Tests
                 var parser = new NbtParser();
                 var parsed = parser.ParseNbtStream(fileStream);
 
-                Assert.Equal(-2, (parsed["Byte Tag"] as NbtByteTag).Payload);
-                Assert.Equal(11234, (parsed["Short Tag"] as NbtShortTag).Payload);
-                Assert.Equal(581248567, (parsed["Int Tag"] as NbtIntTag).Payload);
-                Assert.Equal(5816518613524685468, (parsed["Long Tag"] as NbtLongTag).Payload);
-                Assert.Equal(3.14159F, (parsed["Float Tag"] as NbtFloatTag).Payload);
-                Assert.Equal(66518181.2168181, (parsed["Double Tag"] as NbtDoubleTag).Payload);
-                Assert.Equal("It's a string", (parsed["String Tag"] as NbtStringTag).Payload);
+                Assert.Equal(-2, ((NbtByteTag)parsed["Byte Tag"]).Payload);
+                Assert.Equal(11234, ((NbtShortTag)parsed["Short Tag"]).Payload);
+                Assert.Equal(581248567, ((NbtIntTag)parsed["Int Tag"]).Payload);
+                Assert.Equal(5816518613524685468, ((NbtLongTag)parsed["Long Tag"]).Payload);
+                Assert.Equal(3.14159F, ((NbtFloatTag)parsed["Float Tag"]).Payload);
+                Assert.Equal(66518181.2168181, ((NbtDoubleTag)parsed["Double Tag"]).Payload);
+                Assert.Equal("It's a string", ((NbtStringTag)parsed["String Tag"]).Payload);
             }
         }
 
@@ -44,9 +44,9 @@ namespace NbtLib.Tests
                 var parser = new NbtParser();
                 var parsed = parser.ParseNbtStream(fileStream);
 
-                Assert.Equal(new byte[] { 0, 2, 4, 6, 8, 10 }, (parsed["Byte Array"] as NbtByteArrayTag).Payload);
-                Assert.Equal(new int[] { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55 }, (parsed["Int Array"] as NbtIntArrayTag).Payload);
-                Assert.Equal(new long[] { 1337, 147258369, 8675309 }, (parsed["Long Array"] as NbtLongArrayTag).Payload);
+                Assert.Equal(new byte[] { 0, 2, 4, 6, 8, 10 }, ((NbtByteArrayTag)parsed["Byte Array"]).Payload);
+                Assert.Equal(new int[] { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55 }, ((NbtIntArrayTag)parsed["Int Array"]).Payload);
+                Assert.Equal(new long[] { 1337, 147258369, 8675309 }, ((NbtLongArrayTag)parsed["Long Array"]).Payload);
             }
         }
 
@@ -57,8 +57,8 @@ namespace NbtLib.Tests
             {
                 var parser = new NbtParser();
                 var parsed = parser.ParseNbtStream(fileStream);
-                var stringList = (parsed["String List"] as NbtListTag).Select(t => (t as NbtStringTag).Payload);
-                var intList = (parsed["Int List"] as NbtListTag).Select(t => (t as NbtIntTag).Payload);
+                var stringList = (parsed["String List"] as NbtListTag).Select(t => ((NbtStringTag)t).Payload);
+                var intList = (parsed["Int List"] as NbtListTag).Select(t => ((NbtIntTag)t).Payload);
 
                 Assert.Equal(new string[] { "Alpha", "Beta", "Gamma", "Delta" }, stringList);
                 Assert.Equal(new int[] { 19, 5, 23, 9982 }, intList);
@@ -80,11 +80,11 @@ namespace NbtLib.Tests
                 var itemOne = listChild[0] as NbtCompoundTag;
                 var itemTwo = listChild[1] as NbtCompoundTag;
 
-                Assert.Equal("String Content", (compoundChild["String Tag"] as NbtStringTag).Payload);
-                Assert.Equal(12345, (compoundChild["Int Tag"] as NbtIntTag).Payload);
+                Assert.Equal("String Content", ((NbtStringTag)compoundChild["String Tag"]).Payload);
+                Assert.Equal(12345, ((NbtIntTag)compoundChild["Int Tag"]).Payload);
 
-                Assert.Equal(123, (itemOne["Float"] as NbtFloatTag).Payload);
-                Assert.Equal(456, (itemTwo["Float"] as NbtFloatTag).Payload);
+                Assert.Equal(123, ((NbtFloatTag)itemOne["Float"]).Payload);
+                Assert.Equal(456, ((NbtFloatTag)itemTwo["Float"]).Payload);
             }
         }
 
@@ -96,8 +96,8 @@ namespace NbtLib.Tests
                 var parser = new NbtParser();
                 var parsed = parser.ParseNbtStream(fileStream);
 
-                Assert.Equal(5, (parsed["Int 5"] as NbtIntTag).Payload);
-                Assert.Equal("abcd", (parsed["String abcd"] as NbtStringTag).Payload);
+                Assert.Equal(5, ((NbtIntTag)parsed["Int 5"]).Payload);
+                Assert.Equal("abcd", ((NbtStringTag)parsed["String abcd"]).Payload);
             }
         }
 

@@ -102,7 +102,7 @@ namespace NbtLib
             return System.Text.Encoding.UTF8.GetString(ReadBytes(stream, nameLength));
         }
 
-        private NbtTag ParseTagPayload(Stream stream, NbtTagType tagType)
+        private INbtTag ParseTagPayload(Stream stream, NbtTagType tagType)
         {
             switch (tagType) {
                 case NbtTagType.End:
@@ -141,7 +141,7 @@ namespace NbtLib
         {
             var tag = new NbtCompoundTag();
 
-            NbtTag childTag;
+            INbtTag childTag;
             while(true)
             {
                 var tagType = (NbtTagType)stream.ReadByte();

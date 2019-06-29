@@ -101,7 +101,7 @@ namespace NbtLib
             stream.Write(bytes, 0, 8);
         }
 
-        private void WriteNamedTag(Stream stream, NbtTag tag, string name)
+        private void WriteNamedTag(Stream stream, INbtTag tag, string name)
         {
             stream.WriteByte((byte)tag.TagType);
 
@@ -113,7 +113,7 @@ namespace NbtLib
             WriteTagPayload(stream, tag);
         }
 
-        private void WriteTagPayload(Stream stream, NbtTag tag)
+        private void WriteTagPayload(Stream stream, INbtTag tag)
         {
             if (tag is NbtByteTag byteTag)
             {

@@ -3,14 +3,14 @@ using System.Linq;
 
 namespace NbtLib
 {
-    public class NbtByteArrayTag : NbtTag, IEquatable<NbtByteArrayTag>
+    public struct NbtByteArrayTag : INbtTag<byte[]>, IEquatable<NbtByteArrayTag>
     {
         public NbtByteArrayTag(byte[] payload)
         {
             Payload = payload;
         }
 
-        public override NbtTagType TagType => NbtTagType.ByteArray;
+        public NbtTagType TagType => NbtTagType.ByteArray;
         public byte[] Payload { get; }
 
         public override bool Equals(object obj)

@@ -15,7 +15,7 @@ namespace NbtLib
             return (T)ParseNbtValue(parsed, typeof(T));
         }
 
-        private object ParseNbtValue(NbtTag tag, Type targetType)
+        private object ParseNbtValue(INbtTag tag, Type targetType)
         {
             if (tag is NbtCompoundTag compoundTag)
             {

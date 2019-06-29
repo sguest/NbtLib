@@ -2,14 +2,14 @@
 
 namespace NbtLib
 {
-    public class NbtShortTag : NbtTag, IEquatable<NbtShortTag>
+    public struct NbtShortTag : INbtTag<short>, IEquatable<NbtShortTag>
     {
         public NbtShortTag(short payload)
         {
             Payload = payload;
         }
 
-        public override NbtTagType TagType => NbtTagType.Short;
+        public NbtTagType TagType => NbtTagType.Short;
         public short Payload { get; }
 
         public override bool Equals(object obj)
