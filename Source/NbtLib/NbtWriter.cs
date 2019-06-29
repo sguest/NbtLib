@@ -171,8 +171,8 @@ namespace NbtLib
         private void WriteListTag(Stream stream, NbtListTag tag)
         {
             stream.WriteByte((byte)tag.ItemType);
-            WriteInt(stream, tag.ChildTags.Count);
-            foreach (var childTag in tag.ChildTags)
+            WriteInt(stream, tag.Count);
+            foreach (var childTag in tag)
             {
                 WriteTagPayload(stream, childTag);
             }

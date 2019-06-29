@@ -187,7 +187,7 @@ namespace NbtLib
 
             for(var i = 0; i < length; i++)
             {
-                tag.ChildTags.Add(ParseTagPayload(stream, tag.ItemType));
+                tag.Add(ParseTagPayload(stream, tag.ItemType));
             }
 
             return tag;

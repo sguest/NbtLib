@@ -99,7 +99,7 @@ namespace NbtLib
                     Type itemType = GetCollectionGenericType(targetType);
                     var list = Activator.CreateInstance(targetType);
 
-                    foreach (var childTag in listTag.ChildTags)
+                    foreach (var childTag in listTag)
                     {
                         targetType.InvokeMember("Add", BindingFlags.InvokeMethod, null, list, new[] { ParseNbtValue(childTag, itemType) });
                     }

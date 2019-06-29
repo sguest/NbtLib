@@ -58,12 +58,12 @@ namespace NbtLib.Tests
             {
                 var parser = new NbtParser();
                 var parsed = parser.ParseNbtStream(fileStream);
-                var stringList = (parsed.ChildTags["String List"] as NbtListTag).ChildTags.Select(t => (t as NbtStringTag).Payload);
-                var intList = (parsed.ChildTags["Int List"] as NbtListTag).ChildTags.Select(t => (t as NbtIntTag).Payload);
+                var stringList = (parsed.ChildTags["String List"] as NbtListTag).Select(t => (t as NbtStringTag).Payload);
+                var intList = (parsed.ChildTags["Int List"] as NbtListTag).Select(t => (t as NbtIntTag).Payload);
 
                 Assert.Equal(new string[] { "Alpha", "Beta", "Gamma", "Delta" }, stringList);
                 Assert.Equal(new int[] { 19, 5, 23, 9982 }, intList);
-                Assert.Empty((parsed.ChildTags["End List"] as NbtListTag).ChildTags);
+                Assert.Empty((parsed.ChildTags["End List"] as NbtListTag));
             }
         }
     }
