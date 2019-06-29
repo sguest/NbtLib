@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Linq;
+using Xunit;
 
 namespace NbtLib.Tests
 {
@@ -47,6 +48,22 @@ namespace NbtLib.Tests
                 Assert.Equal(new byte[] { 0, 2, 4, 6, 8, 10 }, (parsed.ChildTags["Byte Array"] as NbtByteArrayTag).Payload);
                 Assert.Equal(new int[] { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55 }, (parsed.ChildTags["Int Array"] as NbtIntArrayTag).Payload);
                 Assert.Equal(new long[] { 1337, 147258369, 8675309 }, (parsed.ChildTags["Long Array"] as NbtLongArrayTag).Payload);
+            }
+        }
+
+        [Fact]
+        public void ParseNbtStream_ShouldReadListTypes()
+        {
+            using (var fileStream = System.IO.File.OpenRead(@"TestData\lists.nbt"))
+            {
+                var parser = new NbtParser();
+                var parsed = parser.ParseNbtStream(fileStream);
+                var stringList = (parsed.ChildTags["String List"] as NbtListTag).ChildTags.Select(t => (t as NbtStringTag).Payload);
+                var intList = (parsed.ChildTags["Int List"] as NbtListTag).ChildTags.Select(t => (t as NbtIntTag).Payload);
+
+                Assert.Equal(new string[] { "Alpha", "Beta", "Gamma", "Delta" }, stringList);
+                Assert.Equal(new int[] { 19, 5, 23, 9982 }, intList);
+                Assert.Empty((parsed.ChildTags["End List"] as NbtListTag).ChildTags);
             }
         }
     }

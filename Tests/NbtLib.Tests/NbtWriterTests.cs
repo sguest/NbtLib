@@ -73,5 +73,41 @@ namespace NbtLib.Tests
                 }
             }
         }
+
+        [Fact]
+        public void CreateNbtStream_ShouldWriteListTypes()
+        {
+            var testData = new NbtCompoundTag()
+            {
+                Name = "Root Tag",
+            };
+
+            var stringList = new NbtListTag { Name = "String List", ItemType = NbtTagType.String };
+            stringList.ChildTags.Add(new NbtStringTag { Payload = "Alpha" });
+            stringList.ChildTags.Add(new NbtStringTag { Payload = "Beta" });
+            stringList.ChildTags.Add(new NbtStringTag { Payload = "Gamma" });
+            stringList.ChildTags.Add(new NbtStringTag { Payload = "Delta" });
+
+            var intList = new NbtListTag { Name = "Int List", ItemType = NbtTagType.Int };
+            intList.ChildTags.Add(new NbtIntTag { Payload = 19 });
+            intList.ChildTags.Add(new NbtIntTag { Payload = 5 });
+            intList.ChildTags.Add(new NbtIntTag { Payload = 23 });
+            intList.ChildTags.Add(new NbtIntTag { Payload = 9982 });
+
+            var endList = new NbtListTag { Name = "End List", ItemType = NbtTagType.End };
+
+            testData.ChildTags.Add("String List", stringList);
+            testData.ChildTags.Add("Int List", intList);
+            testData.ChildTags.Add("End List", endList);
+            var writer = new NbtWriter();
+
+            using (var outputStream = writer.CreateNbtStream(testData))
+            {
+                using (var fileStream = System.IO.File.OpenRead(@"TestData\lists.nbt"))
+                {
+                    Assert.True(TestHelpers.StreamsEqual(outputStream, fileStream));
+                }
+            }
+        }
     }
 }
