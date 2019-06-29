@@ -87,5 +87,28 @@ namespace NbtLib.Tests
                 Assert.Equal(456, (itemTwo["Float"] as NbtFloatTag).Payload);
             }
         }
+
+        [Fact]
+        public void ParseNbtStream_ShouldHandleUncompressedFile()
+        {
+            using (var fileStream = System.IO.File.OpenRead(@"TestData\uncompressed.nbt"))
+            {
+                var parser = new NbtParser();
+                var parsed = parser.ParseNbtStream(fileStream);
+
+                Assert.Equal(5, (parsed["Int 5"] as NbtIntTag).Payload);
+                Assert.Equal("abcd", (parsed["String abcd"] as NbtStringTag).Payload);
+            }
+        }
+
+        [Fact]
+        public void ParseNbtStream_WhenInvalidHeaderBytes_ShouldThrow()
+        {
+            using (var memoryStream = new System.IO.MemoryStream(new byte[] { 4, 5 }))
+            {
+                var parser = new NbtParser();
+                Assert.Throws<System.IO.InvalidDataException>(() => parser.ParseNbtStream(memoryStream));
+            }
+        }
     }
 }

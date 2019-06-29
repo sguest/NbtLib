@@ -148,5 +148,25 @@ namespace NbtLib.Tests
                 }
             }
         }
+
+        [Fact]
+        public void CreateNbtStream_ShouldWriteUncompressedFile()
+        {
+            var testData = new NbtCompoundTag
+            {
+                { "Int 5", new NbtIntTag(5) },
+                { "String abcd", new NbtStringTag("abcd") }
+            };
+
+            var writer = new NbtWriter();
+
+            using (var outputStream = writer.CreateUncompressedNbtStream(testData))
+            {
+                using (var fileStream = System.IO.File.OpenRead(@"TestData\uncompressed.nbt"))
+                {
+                    Assert.True(TestHelpers.StreamsEqual(outputStream, fileStream));
+                }
+            }
+        }
     }
 }

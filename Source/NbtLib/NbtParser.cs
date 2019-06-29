@@ -8,13 +8,22 @@ namespace NbtLib
     {
         public NbtCompoundTag ParseNbtStream(Stream stream)
         {
-            using (var decompressionStream = new GZipStream(stream, CompressionMode.Decompress))
+            var buffer = new byte[2];
+            stream.Read(buffer, 0, 2);
+            stream.Seek(-2, SeekOrigin.Current);
+
+            if(buffer[0] == 0x1f && buffer[1] == 0x8b)
             {
-                return ParseUncompressedNbtStream(decompressionStream);
+                using (var decompressionStream = new GZipStream(stream, CompressionMode.Decompress))
+                {
+                    return ParseUncompressedNbtStream(decompressionStream);
+                }
             }
+
+            return ParseUncompressedNbtStream(stream);
         }
 
-        public NbtCompoundTag ParseUncompressedNbtStream(Stream stream)
+        private NbtCompoundTag ParseUncompressedNbtStream(Stream stream)
         {
             var tagType = (NbtTagType)stream.ReadByte();
             if(tagType != NbtTagType.Compound)
