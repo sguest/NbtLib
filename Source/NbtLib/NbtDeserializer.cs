@@ -24,7 +24,7 @@ namespace NbtLib
                 var dictionaryTypes = GetDictionaryGenericTypes(targetType);
                 if (dictionaryTypes == null)
                 {
-                    foreach (var childTag in compoundTag.ChildTags)
+                    foreach (var childTag in compoundTag)
                     {
                         var info = targetType.GetProperty(childTag.Key, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                         if (info != null)
@@ -39,7 +39,7 @@ namespace NbtLib
                     {
                         throw new Exception("Can only deserialize objects with string keys");
                     }
-                    foreach (var childTag in compoundTag.ChildTags)
+                    foreach (var childTag in compoundTag)
                     {
                         targetType.InvokeMember("Add", BindingFlags.InvokeMethod, null, obj, new[] { childTag.Key, ParseNbtValue(childTag.Value, dictionaryTypes[1]) });
                     }

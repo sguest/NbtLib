@@ -180,7 +180,7 @@ namespace NbtLib
 
         private void WriteCompoundTag(Stream stream, NbtCompoundTag tag)
         {
-            foreach (var childTag in tag.ChildTags)
+            foreach (var childTag in tag)
             {
                 WriteNamedTag(stream, childTag.Value);
             }

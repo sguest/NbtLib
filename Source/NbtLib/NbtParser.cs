@@ -149,7 +149,7 @@ namespace NbtLib
                 {
                     return tag;
                 }
-                tag.ChildTags.Add(childTag.Name, childTag);
+                tag.Add(childTag.Name, childTag);
             }
         }
 
