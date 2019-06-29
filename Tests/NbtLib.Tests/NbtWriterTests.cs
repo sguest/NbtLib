@@ -109,5 +109,41 @@ namespace NbtLib.Tests
                 }
             }
         }
+
+        [Fact]
+        public void CreateNbtStream_ShouldWriteNestedObjects()
+        {
+            var testData = new NbtCompoundTag() { Name = "Root Tag" };
+
+            var compoundChild = new NbtCompoundTag
+            {
+                { "String Tag", new NbtStringTag("String Content") },
+                { "Int Tag", new NbtIntTag(12345) }
+            };
+
+            testData.Add("Compound Child", compoundChild);
+
+            var listChild = new NbtListTag(NbtTagType.Compound);
+
+            testData.Add("List Child", listChild);
+
+            var listItemOne = new NbtCompoundTag();
+            listItemOne.Add("Float", new NbtFloatTag(123));
+            listChild.Add(listItemOne);
+
+            var listItemTwo = new NbtCompoundTag();
+            listItemTwo.Add("Float", new NbtFloatTag(456));
+            listChild.Add(listItemTwo);
+
+            var writer = new NbtWriter();
+
+            using (var outputStream = writer.CreateNbtStream(testData))
+            {
+                using (var fileStream = System.IO.File.OpenRead(@"TestData\nested.nbt"))
+                {
+                    Assert.True(TestHelpers.StreamsEqual(outputStream, fileStream));
+                }
+            }
+        }
     }
 }

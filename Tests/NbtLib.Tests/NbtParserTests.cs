@@ -66,5 +66,27 @@ namespace NbtLib.Tests
                 Assert.Empty((parsed["End List"] as NbtListTag));
             }
         }
+
+        [Fact]
+        public void ParseNbtStream_ShouldReadNestedObjects()
+        {
+            using (var fileStream = System.IO.File.OpenRead(@"TestData\nested.nbt"))
+            {
+                var parser = new NbtParser();
+                var parsed = parser.ParseNbtStream(fileStream);
+
+                var compoundChild = parsed["Compound Child"] as NbtCompoundTag;
+                var listChild = parsed["List Child"] as NbtListTag;
+
+                var itemOne = listChild[0] as NbtCompoundTag;
+                var itemTwo = listChild[1] as NbtCompoundTag;
+
+                Assert.Equal("String Content", (compoundChild["String Tag"] as NbtStringTag).Payload);
+                Assert.Equal(12345, (compoundChild["Int Tag"] as NbtIntTag).Payload);
+
+                Assert.Equal(123, (itemOne["Float"] as NbtFloatTag).Payload);
+                Assert.Equal(456, (itemTwo["Float"] as NbtFloatTag).Payload);
+            }
+        }
     }
 }
