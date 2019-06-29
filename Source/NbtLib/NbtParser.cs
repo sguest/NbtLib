@@ -16,7 +16,13 @@ namespace NbtLib
 
         public NbtCompoundTag ParseUncompressedNbtStream(Stream stream)
         {
-            var rootTag = (NbtCompoundTag)ParseNamedTag(stream);
+            var tagType = (NbtTagType)stream.ReadByte();
+            if(tagType != NbtTagType.Compound)
+            {
+                throw new InvalidDataException($"Invalid NBT stream provided, expected first byte to be {(byte)NbtTagType.Compound}");
+            }
+            ReadString(stream);
+            var rootTag = (NbtCompoundTag)ParseTagPayload(stream, tagType);
             return rootTag;
         }
 
@@ -87,21 +93,6 @@ namespace NbtLib
             return System.Text.Encoding.UTF8.GetString(ReadBytes(stream, nameLength));
         }
 
-        private NbtTag ParseNamedTag(Stream stream)
-        {
-            var tagType = (NbtTagType)stream.ReadByte();
-
-            if (tagType == NbtTagType.End)
-            {
-                return new NbtEndTag();
-            }
-
-            var name = ReadString(stream);
-            var tag = ParseTagPayload(stream, tagType);
-            tag.Name = name;
-            return tag;
-        }
-
         private NbtTag ParseTagPayload(Stream stream, NbtTagType tagType)
         {
             switch (tagType) {
@@ -144,12 +135,16 @@ namespace NbtLib
             NbtTag childTag;
             while(true)
             {
-                childTag = ParseNamedTag(stream);
-                if(childTag is NbtEndTag)
+                var tagType = (NbtTagType)stream.ReadByte();
+
+                if (tagType == NbtTagType.End)
                 {
                     return tag;
                 }
-                tag.Add(childTag.Name, childTag);
+
+                var tagName = ReadString(stream);
+                childTag = ParseTagPayload(stream, tagType);
+                tag.Add(tagName, childTag);
             }
         }
 

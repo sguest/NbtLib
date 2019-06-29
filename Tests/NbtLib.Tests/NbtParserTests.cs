@@ -13,7 +13,6 @@ namespace NbtLib.Tests
                 var parser = new NbtParser();
                 var parsed = parser.ParseNbtStream(fileStream);
 
-                Assert.Equal("Root Tag", parsed.Name);
                 Assert.Equal(5, (parsed["Int 5"] as NbtIntTag).Payload);
                 Assert.Equal("abcd", (parsed["String abcd"] as NbtStringTag).Payload);
             }

@@ -8,7 +8,12 @@ namespace NbtLib
     {
         public Stream CreateNbtStream(NbtCompoundTag rootTag)
         {
-            using (var inputStream = CreateUncompressedNbtStream(rootTag))
+            return CreateNbtStream(rootTag, string.Empty);
+        }
+
+        public Stream CreateNbtStream(NbtCompoundTag rootTag, string rootTagName)
+        {
+            using (var inputStream = CreateUncompressedNbtStream(rootTag, rootTagName))
             {
                 var outputStream = new MemoryStream();
 
@@ -24,8 +29,13 @@ namespace NbtLib
 
         public Stream CreateUncompressedNbtStream(NbtCompoundTag rootTag)
         {
+            return CreateUncompressedNbtStream(rootTag, string.Empty);
+        }
+
+        public Stream CreateUncompressedNbtStream(NbtCompoundTag rootTag, string rootTagName)
+        {
             var stream = new MemoryStream();
-            WriteNamedTag(stream, rootTag);
+            WriteNamedTag(stream, rootTag, rootTagName);
 
             stream.Seek(0, SeekOrigin.Begin);
             return stream;
@@ -91,13 +101,13 @@ namespace NbtLib
             stream.Write(bytes, 0, 8);
         }
 
-        private void WriteNamedTag(Stream stream, NbtTag tag)
+        private void WriteNamedTag(Stream stream, NbtTag tag, string name)
         {
             stream.WriteByte((byte)tag.TagType);
 
             if(tag.TagType != NbtTagType.End)
             {
-                WriteString(stream, tag.Name);
+                WriteString(stream, name);
             }
 
             WriteTagPayload(stream, tag);
@@ -182,7 +192,7 @@ namespace NbtLib
         {
             foreach (var childTag in tag)
             {
-                WriteNamedTag(stream, childTag.Value);
+                WriteNamedTag(stream, childTag.Value, childTag.Key);
             }
 
             stream.WriteByte((byte)NbtTagType.End);
