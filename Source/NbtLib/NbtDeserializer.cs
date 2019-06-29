@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace NbtLib
@@ -78,47 +80,72 @@ namespace NbtLib
             }
             else if (tag is NbtByteArrayTag byteArrayTag)
             {
-                return byteArrayTag.Payload;
+                return MapToCollection(byteArrayTag.Payload, typeof(byte), targetType);
             }
             else if (tag is NbtIntArrayTag intArrayTag)
             {
-                return intArrayTag.Payload;
+                return MapToCollection(intArrayTag.Payload, typeof(int), targetType);
             }
             else if (tag is NbtLongArrayTag longArrayTag)
             {
-                return longArrayTag.Payload;
+                return MapToCollection(longArrayTag.Payload, typeof(long), targetType);
             }
             else if (tag is NbtListTag listTag)
             {
-                if(listTag.ItemType == NbtTagType.End)
-                {
-                    return new List<object>();
-                }
-
                 foreach (Type interfaceType in targetType.GetInterfaces())
                 {
-                    Type itemType = GetCollectionGenericType(targetType);
-                    var list = Activator.CreateInstance(targetType);
+                    Type itemType = GetEnumerableGenericType(targetType);
 
-                    foreach (var childTag in listTag)
-                    {
-                        targetType.InvokeMember("Add", BindingFlags.InvokeMethod, null, list, new[] { ParseNbtValue(childTag, itemType) });
-                    }
-                    return list;
+                    var items = listTag.Select(item => ParseNbtValue(item, itemType)).ToList().AsEnumerable();
+
+                    return MapToCollection(items, itemType, targetType);
                 }
             }
 
             throw new Exception($"Unable to deserialize tag of type {tag.TagType} to type {targetType}");
         }
 
-        private Type GetCollectionGenericType(Type collectionType)
+        private object MapToCollection(IEnumerable collection, Type genericType, Type targetType)
         {
-            foreach (Type interfaceType in collectionType.GetInterfaces())
+            object list;
+            Type collectionType;
+
+            if(targetType.IsArray || targetType.IsInterface)
+            {
+                collectionType = typeof(List<>).MakeGenericType(genericType);
+                list = Activator.CreateInstance(collectionType);
+            }
+            else
+            {
+                list = Activator.CreateInstance(targetType);
+                collectionType = targetType;
+            }
+
+            foreach (var item in collection)
+            {
+                collectionType.InvokeMember("Add", BindingFlags.InvokeMethod, null, list, new object[] { item });
+            }
+
+            if(targetType.IsArray)
+            {
+                return collectionType.InvokeMember("ToArray", BindingFlags.InvokeMethod, null, list, new object[] { });
+            }
+            return list;
+        }
+
+        private Type GetEnumerableGenericType(Type collectionType)
+        {
+            foreach (Type interfaceType in collectionType.GetInterfaces().Union(new Type[] { collectionType }))
             {
                 if (interfaceType.IsGenericType &&
                     interfaceType.GetGenericTypeDefinition()
-                    == typeof(ICollection<>))
+                    == typeof(IEnumerable<>))
                 {
+                    if(collectionType.IsArray)
+                    {
+                        return collectionType.GetElementType();
+                    }
+
                     return collectionType.GetGenericArguments()[0];
                 }
             }

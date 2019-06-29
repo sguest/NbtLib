@@ -51,12 +51,54 @@ namespace NbtLib.Tests
         }
 
         [Fact]
+        public void DeserializeObject_ShouldReadArraysToCollectionTypes()
+        {
+            using (var fileStream = System.IO.File.OpenRead(@"TestData\arrays.nbt"))
+            {
+                var deserializer = new NbtDeserializer();
+                var obj = deserializer.DeserializeObject<ArrayCollectionsObject>(fileStream);
+
+                Assert.Equal(new byte[] { 0, 2, 4, 6, 8, 10 }, obj.ByteArray);
+                Assert.Equal(new int[] { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55 }, obj.IntArray);
+                Assert.Equal(new long[] { 1337, 147258369, 8675309 }, obj.LongArray);
+            }
+        }
+
+        [Fact]
         public void DeserializeObject_ShouldReadListTypes()
         {
             using (var fileStream = System.IO.File.OpenRead(@"TestData\lists.nbt"))
             {
                 var deserializer = new NbtDeserializer();
                 var obj = deserializer.DeserializeObject<ListsObject>(fileStream);
+
+                Assert.Equal(new string[] { "Alpha", "Beta", "Gamma", "Delta" }, obj.StringList);
+                Assert.Equal(new int[] { 19, 5, 23, 9982 }, obj.IntList);
+                Assert.Empty(obj.EndList);
+            }
+        }
+
+        [Fact]
+        public void DeserializeObject_ShouldReadListTypesToInterfaces()
+        {
+            using (var fileStream = System.IO.File.OpenRead(@"TestData\lists.nbt"))
+            {
+                var deserializer = new NbtDeserializer();
+                var obj = deserializer.DeserializeObject<ListInterfacesObject>(fileStream);
+
+                Assert.Equal(new string[] { "Alpha", "Beta", "Gamma", "Delta" }, obj.StringList);
+                Assert.Equal(new int[] { 19, 5, 23, 9982 }, obj.IntList);
+                Assert.Empty(obj.EndList);
+            }
+        }
+
+        [Fact]
+        public void DeserializeObject_ShouldReadListTypesToArrays()
+        {
+            using (var fileStream = System.IO.File.OpenRead(@"TestData\lists.nbt"))
+            {
+                var deserializer = new NbtDeserializer();
+                var obj = deserializer.DeserializeObject<ListsAsArraysObject>(fileStream);
 
                 Assert.Equal(new string[] { "Alpha", "Beta", "Gamma", "Delta" }, obj.StringList);
                 Assert.Equal(new int[] { 19, 5, 23, 9982 }, obj.IntList);
