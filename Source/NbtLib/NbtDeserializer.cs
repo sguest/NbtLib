@@ -21,65 +21,7 @@ namespace NbtLib
         {
             if (tag is NbtCompoundTag compoundTag)
             {
-
-                var dictionaryTypes = GetDictionaryGenericTypes(targetType);
-                if (dictionaryTypes == null)
-                {
-                    if(targetType.IsInterface)
-                    {
-                        return null;
-                    }
-
-                    var obj = Activator.CreateInstance(targetType);
-
-                    foreach (var childTag in compoundTag)
-                    {
-                        var propName = childTag.Key.Replace(" ", "");
-                        var info = targetType.GetProperty(propName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-                        if (info != null)
-                        {
-                            if(!Attribute.IsDefined(info, typeof(NbtIgnoreAttribute)))
-                            {
-                                var value = ParseNbtValue(childTag.Value, info.PropertyType);
-                                if (info.PropertyType.IsAssignableFrom(value.GetType()))
-                                {
-                                    info.SetValue(obj, value);
-                                }
-                            }
-                        }
-                    }
-
-                    return obj;
-                }
-                else
-                {
-                    if (dictionaryTypes[0] != typeof(string))
-                    {
-                        return null;
-                    }
-
-                    object dictionary;
-                    if(targetType.IsInterface)
-                    {
-                        var dictionaryType = typeof(Dictionary<,>).MakeGenericType(dictionaryTypes);
-                        dictionary = Activator.CreateInstance(dictionaryType);
-                    }
-                    else
-                    {
-                        dictionary = Activator.CreateInstance(targetType);
-                    }
-
-                    foreach (var childTag in compoundTag)
-                    {
-                        var value = ParseNbtValue(childTag.Value, dictionaryTypes[1]);
-                        if(dictionaryTypes[1].IsAssignableFrom(value.GetType()))
-                        {
-                            targetType.InvokeMember("Add", BindingFlags.InvokeMethod, null, dictionary, new[] { childTag.Key, ParseNbtValue(childTag.Value, dictionaryTypes[1]) });
-                        }
-                    }
-
-                    return dictionary;
-                }
+                return ParseCompoundTag(compoundTag, targetType);
             }
             else if (tag is NbtByteTag byteTag)
             {
@@ -134,6 +76,93 @@ namespace NbtLib
             }
 
             return null;
+        }
+
+        private object ParseCompoundTag(NbtCompoundTag compoundTag, Type targetType)
+        {
+            var dictionaryTypes = GetDictionaryGenericTypes(targetType);
+            if (dictionaryTypes == null)
+            {
+                return MapToObject(compoundTag, targetType);
+            }
+            else
+            {
+                return MapToDictionary(compoundTag, targetType, dictionaryTypes);
+            }
+        }
+
+        private object MapToObject(NbtCompoundTag compoundTag, Type targetType)
+        {
+            if (targetType.IsInterface)
+            {
+                return null;
+            }
+
+            var obj = Activator.CreateInstance(targetType);
+
+            foreach (var childTag in compoundTag)
+            {
+                var propName = childTag.Key.Replace(" ", "");
+                var info = targetType.GetProperty(propName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+                if (info != null)
+                {
+                    SetPropertyValue(info, obj, childTag.Value);
+                }
+
+                var props = targetType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(NbtPropertyAttribute)));
+                foreach (var prop in props)
+                {
+                    var attribute = prop.GetCustomAttribute<NbtPropertyAttribute>();
+                    if(attribute.PropertyName.Equals(childTag.Key, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        SetPropertyValue(prop, obj, childTag.Value);
+                    }
+                }
+            }
+
+            return obj;
+        }
+
+        private void SetPropertyValue(PropertyInfo info, object parent, INbtTag childTag)
+        {
+            if (!Attribute.IsDefined(info, typeof(NbtIgnoreAttribute)))
+            {
+                var value = ParseNbtValue(childTag, info.PropertyType);
+                if (info.PropertyType.IsAssignableFrom(value.GetType()))
+                {
+                    info.SetValue(parent, value);
+                }
+            }
+        }
+
+        private object MapToDictionary(NbtCompoundTag compoundTag, Type targetType, Type[] dictionaryTypes)
+        {
+            if (dictionaryTypes[0] != typeof(string))
+            {
+                return null;
+            }
+
+            object dictionary;
+            if (targetType.IsInterface)
+            {
+                var dictionaryType = typeof(Dictionary<,>).MakeGenericType(dictionaryTypes);
+                dictionary = Activator.CreateInstance(dictionaryType);
+            }
+            else
+            {
+                dictionary = Activator.CreateInstance(targetType);
+            }
+
+            foreach (var childTag in compoundTag)
+            {
+                var value = ParseNbtValue(childTag.Value, dictionaryTypes[1]);
+                if (dictionaryTypes[1].IsAssignableFrom(value.GetType()))
+                {
+                    targetType.InvokeMember("Add", BindingFlags.InvokeMethod, null, dictionary, new[] { childTag.Key, ParseNbtValue(childTag.Value, dictionaryTypes[1]) });
+                }
+            }
+
+            return dictionary;
         }
 
         private object MapToCollection(IEnumerable collection, Type genericType, Type targetType)

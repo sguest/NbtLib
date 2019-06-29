@@ -198,5 +198,17 @@ namespace NbtLib.Tests
                 Assert.Equal(default(int), obj.Int5);
             }
         }
+
+        [Fact]
+        public void DeserializeObject_ShouldAllowNameByAttribute()
+        {
+            using (var fileStream = System.IO.File.OpenRead(@"TestData\simple.nbt"))
+            {
+                var deserializer = new NbtDeserializer();
+                var obj = deserializer.DeserializeObject<AttributesObject>(fileStream);
+
+                Assert.Equal("abcd", obj.SomeString);
+            }
+        }
     }
 }
