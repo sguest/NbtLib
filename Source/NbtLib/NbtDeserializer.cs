@@ -38,7 +38,11 @@ namespace NbtLib
                         var info = targetType.GetProperty(propName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                         if (info != null)
                         {
-                            info.SetValue(obj, ParseNbtValue(childTag.Value, info.PropertyType));
+                            var value = ParseNbtValue(childTag.Value, info.PropertyType);
+                            if(info.PropertyType.IsAssignableFrom(value.GetType()))
+                            {
+                                info.SetValue(obj, value);
+                            }
                         }
                     }
 
@@ -64,7 +68,11 @@ namespace NbtLib
 
                     foreach (var childTag in compoundTag)
                     {
-                        targetType.InvokeMember("Add", BindingFlags.InvokeMethod, null, dictionary, new[] { childTag.Key, ParseNbtValue(childTag.Value, dictionaryTypes[1]) });
+                        var value = ParseNbtValue(childTag.Value, dictionaryTypes[1]);
+                        if(dictionaryTypes[1].IsAssignableFrom(value.GetType()))
+                        {
+                            targetType.InvokeMember("Add", BindingFlags.InvokeMethod, null, dictionary, new[] { childTag.Key, ParseNbtValue(childTag.Value, dictionaryTypes[1]) });
+                        }
                     }
 
                     return dictionary;

@@ -160,5 +160,31 @@ namespace NbtLib.Tests
                 Assert.Equal(456, obj.ListChild[1]["Float"]);
             }
         }
+
+        [Fact]
+        public void DeserializeObject_ShouldOnlyParseMatchingTypes()
+        {
+            using (var fileStream = System.IO.File.OpenRead(@"TestData\simple.nbt"))
+            {
+                var deserializer = new NbtDeserializer();
+                var obj = deserializer.DeserializeObject<SimpleStringObject>(fileStream);
+
+                Assert.Equal(default(string), obj.Int5);
+                Assert.Equal("abcd", obj.StringAbcd);
+            }
+        }
+
+        [Fact]
+        public void DeserializeObject_ShouldOnlyPopulateMatchingDictionaryTypes()
+        {
+            using (var fileStream = System.IO.File.OpenRead(@"TestData\simple.nbt"))
+            {
+                var deserializer = new NbtDeserializer();
+                var obj = deserializer.DeserializeObject<IDictionary<string, int>>(fileStream);
+
+                Assert.Equal(5, obj["Int 5"]);
+                Assert.False(obj.ContainsKey("String abcd"));
+            }
+        }
     }
 }
