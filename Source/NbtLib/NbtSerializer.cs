@@ -24,9 +24,30 @@ namespace NbtLib
         {
             var targetType = obj.GetType();
 
-            if (targetType == typeof(int))
+            // unsigned versions of integer-based types are stored as the next size up in order to avoid overflows
+            if (targetType == typeof(sbyte))
+            {
+                return new NbtByteTag((sbyte)obj);
+            }
+            else if(targetType == typeof(short) || targetType == typeof(byte))
+            {
+                return new NbtShortTag((short)obj);
+            }
+            else if (targetType == typeof(int) || targetType == typeof(ushort))
             {
                 return new NbtIntTag((int)obj);
+            }
+            else if (targetType == typeof(long) || targetType == typeof(uint))
+            {
+                return new NbtLongTag((long)obj);
+            }
+            else if(targetType == typeof(float))
+            {
+                return new NbtFloatTag((float)obj);
+            }
+            else if(targetType == typeof(double))
+            {
+                return new NbtDoubleTag((double)obj);
             }
             else if(targetType == typeof(string))
             {
