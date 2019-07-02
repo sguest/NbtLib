@@ -33,19 +33,6 @@ namespace NbtLib.Tests
         }
 
         [Fact]
-        public void DeserializeObject_ShouldParseToIDictionary()
-        {
-            using (var fileStream = System.IO.File.OpenRead(@"TestData\simple.nbt"))
-            {
-                var deserializer = new NbtDeserializer();
-                var obj = deserializer.DeserializeObject<Dictionary<string, object>>(fileStream);
-
-                Assert.Equal(5, obj["Int 5"]);
-                Assert.Equal("abcd", obj["String abcd"]);
-            }
-        }
-
-        [Fact]
         public void DeserializeObject_ShouldReadPrimitiveTypes()
         {
             using (var fileStream = System.IO.File.OpenRead(@"TestData\primitives.nbt"))
