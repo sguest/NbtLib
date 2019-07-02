@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace NbtLib
@@ -52,6 +54,27 @@ namespace NbtLib
             else if(targetType == typeof(string))
             {
                 return new NbtStringTag(obj.ToString());
+            }
+            else if (obj is IEnumerable enumerable)
+            {
+                var enumerableType = ReflectionHelpers.GetEnumerableGenericType(targetType) ?? typeof(object);
+
+                if (enumerableType == typeof(byte))
+                {
+                    return new NbtByteArrayTag((obj as IEnumerable<byte>).ToArray());
+                }
+                else if (enumerableType == typeof(int))
+                {
+                    return new NbtIntArrayTag((obj as IEnumerable<int>).ToArray());
+                }
+                else if (enumerableType == typeof(long))
+                {
+                    return new NbtLongArrayTag((obj as IEnumerable<long>).ToArray());
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {

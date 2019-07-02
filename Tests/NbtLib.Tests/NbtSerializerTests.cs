@@ -63,5 +63,42 @@ namespace NbtLib.Tests
             Assert.Equal(66518181.2168181, ((NbtDoubleTag)tag["DoubleTag"]).Payload);
             Assert.Equal("It's a string", ((NbtStringTag)tag["StringTag"]).Payload);
         }
+
+        [Fact]
+        public void SerializeObjectToTag_ShouldSerializeArrayTypes()
+        {
+            var obj = new ArraysObject
+            {
+                ByteArray = new byte[] { 0, 2, 4, 6, 8, 10 },
+                IntArray = new int[] { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55 },
+                LongArray = new long[] { 1337, 147258369, 8675309 }
+            };
+
+            var serializer = new NbtSerializer();
+            var tag = serializer.SerializeObjectToTag(obj);
+
+            Assert.Equal(obj.ByteArray, ((NbtByteArrayTag)tag["ByteArray"]).Payload);
+            Assert.Equal(obj.IntArray, ((NbtIntArrayTag)tag["IntArray"]).Payload);
+            Assert.Equal(obj.LongArray, ((NbtLongArrayTag)tag["LongArray"]).Payload);
+        }
+
+
+        [Fact]
+        public void DeserializeObject_ShouldReadArraysToCollectionTypes()
+        {
+            var obj = new ArrayCollectionsObject
+            {
+                ByteArray = new List<byte>(new byte[] { 0, 2, 4, 6, 8, 10 }),
+                IntArray = new List<int>(new int[] { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55 }).AsReadOnly(),
+                LongArray = new List<long>(new long[] { 1337, 147258369, 8675309 })
+            };
+
+            var serializer = new NbtSerializer();
+            var tag = serializer.SerializeObjectToTag(obj);
+
+            Assert.Equal(obj.ByteArray, ((NbtByteArrayTag)tag["ByteArray"]).Payload);
+            Assert.Equal(obj.IntArray, ((NbtIntArrayTag)tag["IntArray"]).Payload);
+            Assert.Equal(obj.LongArray, ((NbtLongArrayTag)tag["LongArray"]).Payload);
+        }
     }
 }

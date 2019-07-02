@@ -72,7 +72,7 @@ namespace NbtLib
             {
                 foreach (Type interfaceType in targetType.GetInterfaces())
                 {
-                    Type itemType = GetEnumerableGenericType(targetType);
+                    Type itemType = ReflectionHelpers.GetEnumerableGenericType(targetType);
 
                     var items = listTag.Select(item => ParseNbtValue(item, itemType)).ToList().AsEnumerable();
 
@@ -196,26 +196,6 @@ namespace NbtLib
                 return collectionType.InvokeMember("ToArray", BindingFlags.InvokeMethod, null, list, new object[] { });
             }
             return list;
-        }
-
-        private Type GetEnumerableGenericType(Type collectionType)
-        {
-            foreach (Type interfaceType in collectionType.GetInterfaces().Union(new Type[] { collectionType }))
-            {
-                if (interfaceType.IsGenericType &&
-                    interfaceType.GetGenericTypeDefinition()
-                    == typeof(IEnumerable<>))
-                {
-                    if(collectionType.IsArray)
-                    {
-                        return collectionType.GetElementType();
-                    }
-
-                    return collectionType.GetGenericArguments()[0];
-                }
-            }
-
-            return null;
         }
 
         private Type[] GetDictionaryGenericTypes(Type dictionaryType)
