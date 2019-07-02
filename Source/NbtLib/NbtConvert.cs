@@ -39,5 +39,11 @@ namespace NbtLib
             var deserializer = new NbtDeserializer();
             return deserializer.DeserializeObject<T>(stream);
         }
+
+        public static T DeserializeObject<T>(NbtCompoundTag compoundTag)
+        {
+            var deserializer = new NbtDeserializer();
+            return deserializer.DeserializeObject<T>(compoundTag);
+        }
     }
 }

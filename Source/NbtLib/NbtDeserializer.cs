@@ -14,7 +14,12 @@ namespace NbtLib
             var parser = new NbtParser();
             var parsed = parser.ParseNbtStream(stream);
 
-            return (T)ParseNbtValue(parsed, typeof(T));
+            return DeserializeObject<T>(parsed);
+        }
+
+        public T DeserializeObject<T>(NbtCompoundTag compoundTag)
+        {
+            return (T)ParseNbtValue(compoundTag, typeof(T));
         }
 
         private object ParseNbtValue(INbtTag tag, Type targetType)
