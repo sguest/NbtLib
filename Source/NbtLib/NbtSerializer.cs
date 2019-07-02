@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using System.Reflection;
 
@@ -16,7 +17,7 @@ namespace NbtLib
 
         public NbtCompoundTag SerializeObjectToTag(object obj)
         {
-            return (NbtCompoundTag)SerializeTag(obj);
+            return SerializeCompoundTag(obj);
         }
 
         private INbtTag SerializeTag(object obj)
@@ -33,11 +34,27 @@ namespace NbtLib
             }
             else
             {
-                var tag = new NbtCompoundTag();
+                return SerializeCompoundTag(obj);
+            }
+        }
 
+        private NbtCompoundTag SerializeCompoundTag(object obj)
+        {
+            var targetType = obj.GetType();
+            var tag = new NbtCompoundTag();
+
+            if (obj is IDictionary dictionary)
+            {
+                foreach (var key in dictionary.Keys)
+                {
+                    tag.Add(key.ToString(), SerializeTag(dictionary[key]));
+                }
+            }
+            else
+            {
                 foreach (var propInfo in targetType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                 {
-                    if(propInfo.CanRead)
+                    if (propInfo.CanRead)
                     {
                         var name = propInfo.Name;
                         var value = SerializeTag(propInfo.GetValue(obj));
@@ -45,8 +62,8 @@ namespace NbtLib
                     }
                 }
 
-                return tag;
             }
+            return tag;
         }
     }
 }
