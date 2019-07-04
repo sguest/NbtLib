@@ -84,7 +84,7 @@ namespace NbtLib.Tests
 
 
         [Fact]
-        public void DeserializeObject_ShouldReadArraysToCollectionTypes()
+        public void SerializeObjectToTag_ShouldSerializeCollectionTypesToArrays()
         {
             var obj = new ArrayCollectionsObject
             {
