@@ -125,9 +125,23 @@ namespace NbtLib
                 {
                     if (propInfo.CanRead)
                     {
-                        var name = propInfo.Name;
-                        var value = SerializeTag(propInfo.GetValue(obj));
-                        tag.Add(name, value);
+                        if (!propInfo.IsDefined(typeof(NbtIgnoreAttribute)))
+                        {
+                            var attribute = propInfo.GetCustomAttribute<NbtPropertyAttribute>();
+
+                            string name = null;
+                            if(attribute != null)
+                            {
+                                name = attribute.PropertyName;
+                            }
+                            if (string.IsNullOrWhiteSpace(name))
+                            {
+                                name = propInfo.Name;
+                            }
+
+                            var value = SerializeTag(propInfo.GetValue(obj));
+                            tag.Add(name, value);
+                        }
                     }
                 }
 

@@ -155,5 +155,34 @@ namespace NbtLib.Tests
             Assert.Equal(obj.ListChild[0].Float, ((NbtFloatTag)listItems[0]["Float"]).Payload);
             Assert.Equal(obj.ListChild[1].Float, ((NbtFloatTag)listItems[1]["Float"]).Payload);
         }
+
+        [Fact]
+        public void SerializeObjectToTag_ShouldIgnoreByAttribute()
+        {
+            var obj = new AttributesObject
+            {
+                Int5 = 5
+            };
+
+            var serializer = new NbtSerializer();
+            var tag = serializer.SerializeObjectToTag(obj);
+
+            Assert.False(tag.ContainsKey("Int5"));
+        }
+
+        [Fact]
+        public void SerializeObjectToTag_ShouldAllowNameByAttribute()
+        {
+            var obj = new AttributesObject
+            {
+                SomeString = "abcd"
+            };
+
+            var serializer = new NbtSerializer();
+            var tag = serializer.SerializeObjectToTag(obj);
+
+            Assert.Equal(obj.SomeString, ((NbtStringTag)tag["String Abcd"]).Payload);
+            Assert.False(tag.ContainsKey("SomeString"));
+        }
     }
 }
