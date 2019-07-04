@@ -1,5 +1,6 @@
 ﻿using NbtLib.Tests.Serialization;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace NbtLib.Tests
@@ -99,6 +100,60 @@ namespace NbtLib.Tests
             Assert.Equal(obj.ByteArray, ((NbtByteArrayTag)tag["ByteArray"]).Payload);
             Assert.Equal(obj.IntArray, ((NbtIntArrayTag)tag["IntArray"]).Payload);
             Assert.Equal(obj.LongArray, ((NbtLongArrayTag)tag["LongArray"]).Payload);
+        }
+
+        [Fact]
+        public void SerializeObjectToTag_ShouldSerializeListTypes()
+        {
+            var obj = new ListsObject
+            {
+                StringList = new List<string>(new string[] { "Alpha", "Beta", "Gamma", "Delta" }),
+                EndList = new List<object>()
+            };
+
+            var serializer = new NbtSerializer();
+            var tag = serializer.SerializeObjectToTag(obj);
+
+            var stringList = (NbtListTag)tag["StringList"];
+            var emptyList = (NbtListTag)tag["EndList"];
+
+            Assert.Null(tag["IntList"]);
+            Assert.Equal(NbtTagType.String, stringList.ItemType);
+            Assert.Equal(obj.StringList, stringList.Payload.Select(t => ((NbtStringTag)t).Payload));
+            Assert.Equal(NbtTagType.Compound, emptyList.ItemType);
+            Assert.Empty(emptyList.Payload);
+        }
+
+
+        [Fact]
+        public void SerializeObjectToTag_ShouldSerializeNestedObjects()
+        {
+            var obj = new NestedObject
+            {
+                CompoundChild = new CompoundChild
+                {
+                    StringTag = "String Content",
+                    IntTag = 12345
+                },
+                ListChild = new List<ListChild>()
+                {
+                    new ListChild { Float = 123 },
+                    new ListChild { Float = 456 }
+                }
+            };
+
+            var serializer = new NbtSerializer();
+            var tag = serializer.SerializeObjectToTag(obj);
+
+            var compoundChild = tag["CompoundChild"] as NbtCompoundTag;
+            var listChild = tag["ListChild"] as NbtListTag;
+
+            var listItems = listChild.Payload.Select(i => (NbtCompoundTag)i).ToList();
+
+            Assert.Equal(obj.CompoundChild.StringTag, ((NbtStringTag)compoundChild["StringTag"]).Payload);
+            Assert.Equal(obj.CompoundChild.IntTag, ((NbtIntTag)compoundChild["IntTag"]).Payload);
+            Assert.Equal(obj.ListChild[0].Float, ((NbtFloatTag)listItems[0]["Float"]).Payload);
+            Assert.Equal(obj.ListChild[1].Float, ((NbtFloatTag)listItems[1]["Float"]).Payload);
         }
     }
 }

@@ -24,36 +24,17 @@ namespace NbtLib
 
         private INbtTag SerializeTag(object obj)
         {
+            if(obj == null)
+            {
+                return null;
+            }
+
             var targetType = obj.GetType();
 
-            // unsigned versions of integer-based types are stored as the next size up in order to avoid overflows
-            if (targetType == typeof(sbyte))
+            var primitiveTypes = GetPrimitiveTagType(targetType);
+            if(primitiveTypes != null)
             {
-                return new NbtByteTag((sbyte)obj);
-            }
-            else if(targetType == typeof(short) || targetType == typeof(byte))
-            {
-                return new NbtShortTag((short)obj);
-            }
-            else if (targetType == typeof(int) || targetType == typeof(ushort))
-            {
-                return new NbtIntTag((int)obj);
-            }
-            else if (targetType == typeof(long) || targetType == typeof(uint))
-            {
-                return new NbtLongTag((long)obj);
-            }
-            else if(targetType == typeof(float))
-            {
-                return new NbtFloatTag((float)obj);
-            }
-            else if(targetType == typeof(double))
-            {
-                return new NbtDoubleTag((double)obj);
-            }
-            else if(targetType == typeof(string))
-            {
-                return new NbtStringTag(obj.ToString());
+                return (INbtTag)Activator.CreateInstance(primitiveTypes.Item1, obj);
             }
             else if (obj is IEnumerable enumerable)
             {
@@ -71,15 +52,59 @@ namespace NbtLib
                 {
                     return new NbtLongArrayTag((obj as IEnumerable<long>).ToArray());
                 }
-                else
+
+                var enumerableTagTypes = GetPrimitiveTagType(enumerableType);
+                if (enumerableTagTypes == null)
                 {
-                    return null;
+                    enumerableTagTypes = new Tuple<Type, NbtTagType>(typeof(NbtCompoundTag), NbtTagType.Compound);
                 }
+
+                var tag = new NbtListTag(enumerableTagTypes.Item2);
+                foreach (var item in enumerable)
+                {
+                    tag.Add(SerializeTag(item));
+                }
+                return tag;
             }
             else
             {
                 return SerializeCompoundTag(obj);
             }
+        }
+
+        private Tuple<Type, NbtTagType>GetPrimitiveTagType(Type targetType)
+        {
+            // unsigned versions of integer-based types are stored as the next size up in order to avoid overflows
+            if (targetType == typeof(sbyte))
+            {
+                return new Tuple<Type, NbtTagType>(typeof(NbtByteTag), NbtTagType.Byte);
+            }
+            else if (targetType == typeof(short) || targetType == typeof(byte))
+            {
+                return new Tuple<Type, NbtTagType>(typeof(NbtShortTag), NbtTagType.Short);
+            }
+            else if (targetType == typeof(int) || targetType == typeof(ushort))
+            {
+                return new Tuple<Type, NbtTagType>(typeof(NbtIntTag), NbtTagType.Int);
+            }
+            else if (targetType == typeof(long) || targetType == typeof(uint))
+            {
+                return new Tuple<Type, NbtTagType>(typeof(NbtLongTag), NbtTagType.Long);
+            }
+            else if (targetType == typeof(float))
+            {
+                return new Tuple<Type, NbtTagType>(typeof(NbtFloatTag), NbtTagType.Float);
+            }
+            else if (targetType == typeof(double))
+            {
+                return new Tuple<Type, NbtTagType>(typeof(NbtDoubleTag), NbtTagType.Double);
+            }
+            else if (targetType == typeof(string))
+            {
+                return new Tuple<Type, NbtTagType>(typeof(NbtStringTag), NbtTagType.String);
+            }
+
+            return null;
         }
 
         private NbtCompoundTag SerializeCompoundTag(object obj)
