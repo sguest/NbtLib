@@ -83,7 +83,6 @@ namespace NbtLib.Tests
             Assert.Equal(obj.LongArray, ((NbtLongArrayTag)tag["LongArray"]).Payload);
         }
 
-
         [Fact]
         public void SerializeObjectToTag_ShouldSerializeCollectionTypesToArrays()
         {
@@ -123,7 +122,6 @@ namespace NbtLib.Tests
             Assert.Equal(NbtTagType.Compound, emptyList.ItemType);
             Assert.Empty(emptyList.Payload);
         }
-
 
         [Fact]
         public void SerializeObjectToTag_ShouldSerializeNestedObjects()
@@ -183,6 +181,49 @@ namespace NbtLib.Tests
 
             Assert.Equal(obj.SomeString, ((NbtStringTag)tag["String Abcd"]).Payload);
             Assert.False(tag.ContainsKey("SomeString"));
+        }
+
+        [Fact]
+        public void SerializeObjectToTag_WithSettings_ShouldSerializeArraysToList()
+        {
+            var obj = new ArrayCollectionsObject
+            {
+                ByteArray = new List<byte>(new byte[] { 0, 2, 4, 6, 8, 10 }),
+                IntArray = new List<int>(new int[] { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55 }).AsReadOnly(),
+                LongArray = new List<long>(new long[] { 1337, 147258369, 8675309 })
+            };
+
+            var settings = new NbtSerializerSettings { UseArrayTypes = false };
+            var serializer = new NbtSerializer(settings);
+            var tag = serializer.SerializeObjectToTag(obj);
+
+            var byteList = (NbtListTag)tag["ByteArray"];
+            var intList = (NbtListTag)tag["IntArray"];
+            var longList = (NbtListTag)tag["LongArray"];
+
+            Assert.Equal(NbtTagType.Short, byteList.ItemType);
+            Assert.Equal(obj.ByteArray.Select(i => (short)i), byteList.Select(i => ((NbtShortTag)i).Payload));
+            Assert.Equal(NbtTagType.Int, intList.ItemType);
+            Assert.Equal(obj.IntArray, intList.Select(i => ((NbtIntTag)i).Payload));
+            Assert.Equal(NbtTagType.Long, longList.ItemType);
+            Assert.Equal(obj.LongArray, longList.Select(i => ((NbtLongTag)i).Payload));
+        }
+
+        [Fact]
+        public void SerializeObjectToTag_WithAttribute_ShouldSerializeArrayToList()
+        {
+            var obj = new CollectionsAttributesObject
+            {
+                IntList = new List<int>(new int[] { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55 }),
+            };
+
+            var serializer = new NbtSerializer();
+            var tag = serializer.SerializeObjectToTag(obj);
+
+            var intList = (NbtListTag)tag["IntList"];
+
+            Assert.Equal(NbtTagType.Int, intList.ItemType);
+            Assert.Equal(obj.IntList, intList.Select(i => ((NbtIntTag)i).Payload));
         }
     }
 }

@@ -9,6 +9,18 @@ namespace NbtLib
 {
     public class NbtSerializer
     {
+        public NbtSerializerSettings Settings { get; set; }
+
+        public NbtSerializer()
+        {
+            Settings = new NbtSerializerSettings();
+        }
+
+        public NbtSerializer(NbtSerializerSettings settings)
+        {
+            Settings = settings;
+        }
+
         public Stream SerializeObject(object obj)
         {
             var tag = SerializeObjectToTag(obj);
@@ -22,7 +34,7 @@ namespace NbtLib
             return SerializeCompoundTag(obj);
         }
 
-        private INbtTag SerializeTag(object obj)
+        private INbtTag SerializeTag(object obj, NbtPropertyAttribute propertyAttribute = null)
         {
             if(obj == null)
             {
@@ -40,17 +52,26 @@ namespace NbtLib
             {
                 var enumerableType = ReflectionHelpers.GetEnumerableGenericType(targetType) ?? typeof(object);
 
-                if (enumerableType == typeof(byte))
+                var useArray = Settings.UseArrayTypes;
+                if(propertyAttribute != null && propertyAttribute.IsUseArrayTypeSpecified)
                 {
-                    return new NbtByteArrayTag((obj as IEnumerable<byte>).ToArray());
+                    useArray = propertyAttribute.UseArrayType;
                 }
-                else if (enumerableType == typeof(int))
+
+                if (useArray)
                 {
-                    return new NbtIntArrayTag((obj as IEnumerable<int>).ToArray());
-                }
-                else if (enumerableType == typeof(long))
-                {
-                    return new NbtLongArrayTag((obj as IEnumerable<long>).ToArray());
+                    if (enumerableType == typeof(byte))
+                    {
+                        return new NbtByteArrayTag((obj as IEnumerable<byte>).ToArray());
+                    }
+                    else if (enumerableType == typeof(int))
+                    {
+                        return new NbtIntArrayTag((obj as IEnumerable<int>).ToArray());
+                    }
+                    else if (enumerableType == typeof(long))
+                    {
+                        return new NbtLongArrayTag((obj as IEnumerable<long>).ToArray());
+                    }
                 }
 
                 var enumerableTagTypes = GetPrimitiveTagType(enumerableType);
@@ -139,7 +160,7 @@ namespace NbtLib
                                 name = propInfo.Name;
                             }
 
-                            var value = SerializeTag(propInfo.GetValue(obj));
+                            var value = SerializeTag(propInfo.GetValue(obj), attribute);
                             tag.Add(name, value);
                         }
                     }
