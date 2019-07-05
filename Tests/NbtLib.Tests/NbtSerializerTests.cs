@@ -184,6 +184,21 @@ namespace NbtLib.Tests
         }
 
         [Fact]
+        public void SerializeObjectToTag_WithSettings_ShouldUseNamingStrategy()
+        {
+            var obj = new SimpleObject()
+            {
+                Int5 = 5
+            };
+
+            var settings = new NbtSerializerSettings { NamingStrategy = new TestNamingStrategy() };
+            var serializer = new NbtSerializer(settings);
+            var tag = serializer.SerializeObjectToTag(obj);
+
+            Assert.Equal(5, ((NbtIntTag)tag["Int5-TEST"]).Payload);
+        }
+
+        [Fact]
         public void SerializeObjectToTag_WithSettings_ShouldSerializeArraysToList()
         {
             var obj = new ArrayCollectionsObject

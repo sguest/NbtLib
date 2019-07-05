@@ -169,7 +169,7 @@ namespace NbtLib
                             }
                             if (string.IsNullOrWhiteSpace(name))
                             {
-                                name = propInfo.Name;
+                                name = Settings.NamingStrategy.GetTagName(propInfo.Name);
                             }
 
                             var value = SerializeTag(propInfo.GetValue(obj), attribute);
