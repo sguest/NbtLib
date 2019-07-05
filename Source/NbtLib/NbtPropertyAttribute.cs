@@ -25,5 +25,25 @@ namespace NbtLib
                 return useArrayTypeImpl.HasValue;
             }
         }
+
+        private bool? emptyListAsEndImpl = null;
+        public bool EmptyListAsEnd
+        {
+            get
+            {
+                return emptyListAsEndImpl.GetValueOrDefault(false);
+            }
+            set
+            {
+                emptyListAsEndImpl = value;
+            }
+        }
+        public bool IsEmptyListAsEndSpecified
+        {
+            get
+            {
+                return emptyListAsEndImpl.HasValue;
+            }
+        }
     }
 }

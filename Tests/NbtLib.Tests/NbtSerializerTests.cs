@@ -225,5 +225,41 @@ namespace NbtLib.Tests
             Assert.Equal(NbtTagType.Int, intList.ItemType);
             Assert.Equal(obj.IntList, intList.Select(i => ((NbtIntTag)i).Payload));
         }
+
+        [Fact]
+        public void SerializeObjectToTag_WithSettings_ShouldUseEndForEmptyList()
+        {
+            var obj = new ListsObject
+            {
+                EndList = new List<object>(),
+                StringList = new List<string>(new string[] { "a", "b", "c" })
+            };
+
+            var settings = new NbtSerializerSettings { EmptyListAsEnd = true };
+            var serializer = new NbtSerializer(settings);
+            var tag = serializer.SerializeObjectToTag(obj);
+
+            var stringList = (NbtListTag)tag["StringList"];
+            var emptyList = (NbtListTag)tag["EndList"];
+
+            Assert.Equal(NbtTagType.End, emptyList.ItemType);
+            Assert.Equal(NbtTagType.String, stringList.ItemType);
+        }
+
+        [Fact]
+        public void SerializeObjectToTag_WithAttribute_ShouldUseEndForEmptyList()
+        {
+            var obj = new CollectionsAttributesObject
+            {
+                EmptyList = new List<object>(),
+            };
+
+            var serializer = new NbtSerializer();
+            var tag = serializer.SerializeObjectToTag(obj);
+
+            var emptyList = (NbtListTag)tag["EmptyList"];
+
+            Assert.Equal(NbtTagType.End, emptyList.ItemType);
+        }
     }
 }

@@ -6,5 +6,8 @@ namespace NbtLib.Tests.Serialization
     {
         [NbtProperty(UseArrayType = false)]
         public List<int> IntList { get; set; }
+
+        [NbtProperty(EmptyListAsEnd = true)]
+        public List<object> EmptyList { get; set; }
     }
 }

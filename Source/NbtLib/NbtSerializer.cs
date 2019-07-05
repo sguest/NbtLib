@@ -80,7 +80,19 @@ namespace NbtLib
                     enumerableTagTypes = new Tuple<Type, NbtTagType>(typeof(NbtCompoundTag), NbtTagType.Compound);
                 }
 
-                var tag = new NbtListTag(enumerableTagTypes.Item2);
+                var tagType = enumerableTagTypes.Item2;
+
+                var emptyListAsEnd = Settings.EmptyListAsEnd;
+                if (propertyAttribute != null && propertyAttribute.IsEmptyListAsEndSpecified)
+                {
+                    emptyListAsEnd = propertyAttribute.EmptyListAsEnd;
+                }
+                if (!enumerable.Cast<object>().Any() && emptyListAsEnd)
+                {
+                    tagType = NbtTagType.End;
+                }
+
+                var tag = new NbtListTag(tagType);
                 foreach (var item in enumerable)
                 {
                     tag.Add(SerializeTag(item));
