@@ -45,5 +45,29 @@ namespace NbtLib
             var deserializer = new NbtDeserializer();
             return deserializer.DeserializeObject<T>(compoundTag);
         }
+
+        public static NbtCompoundTag SerializeObjectToTag(object obj)
+        {
+            var serializer = new NbtSerializer();
+            return serializer.SerializeObjectToTag(obj);
+        }
+
+        public static NbtCompoundTag SerializeObjectToTag(object obj, NbtSerializerSettings settings)
+        {
+            var serializer = new NbtSerializer(settings);
+            return serializer.SerializeObjectToTag(obj);
+        }
+
+        public static Stream SerializeObject(object obj)
+        {
+            var serializer = new NbtSerializer();
+            return serializer.SerializeObject(obj);
+        }
+
+        public static Stream SerializeObject(object obj, NbtSerializerSettings settings)
+        {
+            var serializer = new NbtSerializer(settings);
+            return serializer.SerializeObject(obj);
+        }
     }
 }
