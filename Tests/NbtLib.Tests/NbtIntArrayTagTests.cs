@@ -12,5 +12,13 @@ namespace NbtLib.Tests
 
             Assert.Equal(int1, int2);
         }
+
+        [Fact]
+        public void ToString_ShouldReturnIntArray()
+        {
+            var array = new NbtIntArrayTag(new int[] { 8, 9, 10 });
+
+            Assert.Equal("[8, 9, 10]", array.ToString());
+        }
     }
 }

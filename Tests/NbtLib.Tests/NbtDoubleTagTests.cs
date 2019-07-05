@@ -12,5 +12,13 @@ namespace NbtLib.Tests
 
             Assert.Equal(double1, double2);
         }
+
+        [Fact]
+        public void ToString_ShouldReturnPayload()
+        {
+            var dbl = new NbtDoubleTag(1.23);
+
+            Assert.Equal("1.23", dbl.ToString());
+        }
     }
 }

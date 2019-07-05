@@ -12,5 +12,13 @@ namespace NbtLib.Tests
 
             Assert.Equal(int1, int2);
         }
+
+        [Fact]
+        public void ToString_ShouldReturnPayload()
+        {
+            var i = new NbtIntTag(6);
+
+            Assert.Equal("6", i.ToString());
+        }
     }
 }

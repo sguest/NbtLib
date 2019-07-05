@@ -12,5 +12,13 @@ namespace NbtLib.Tests
 
             Assert.Equal(float1, float2);
         }
+
+        [Fact]
+        public void Equals_ShouldReturnPayload()
+        {
+            var flt = new NbtFloatTag(6.78f);
+
+            Assert.Equal("6.78", flt.ToString());
+        }
     }
 }

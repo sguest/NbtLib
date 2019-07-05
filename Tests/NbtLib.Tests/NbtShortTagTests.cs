@@ -12,5 +12,13 @@ namespace NbtLib.Tests
 
             Assert.Equal(short1, short2);
         }
+
+        [Fact]
+        public void ToString_ShouldReturnPayload()
+        {
+            var s = new NbtShortTag(6);
+
+            Assert.Equal("6", s.ToString());
+        }
     }
 }

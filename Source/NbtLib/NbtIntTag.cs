@@ -28,5 +28,7 @@ namespace NbtLib
         }
 
         public override int GetHashCode() => Payload;
+
+        public override string ToString() => Payload.ToString();
     }
 }

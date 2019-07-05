@@ -12,5 +12,13 @@ namespace NbtLib.Tests
 
             Assert.Equal(long1, long2);
         }
+
+        [Fact]
+        public void ToString_ShouldReturnLongArray()
+        {
+            var array = new NbtLongArrayTag(new long[] { 8, 9, 10 });
+
+            Assert.Equal("[8, 9, 10]", array.ToString());
+        }
     }
 }

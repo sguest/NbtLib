@@ -12,5 +12,13 @@ namespace NbtLib.Tests
 
             Assert.Equal(byte1, byte2);
         }
+
+        [Fact]
+        public void ToString_ShouldReturnPayload()
+        {
+            var b = new NbtByteTag(6);
+
+            Assert.Equal("6", b.ToString());
+        }
     }
 }

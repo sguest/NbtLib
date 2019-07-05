@@ -12,5 +12,13 @@ namespace NbtLib.Tests
 
             Assert.Equal(string1, string2);
         }
+
+        [Fact]
+        public void ToString_ShouldReturnPayload()
+        {
+            var s = new NbtStringTag("def");
+
+            Assert.Equal("def", s.ToString());
+        }
     }
 }

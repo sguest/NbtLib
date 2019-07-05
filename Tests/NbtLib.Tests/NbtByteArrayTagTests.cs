@@ -12,5 +12,13 @@ namespace NbtLib.Tests
 
             Assert.Equal(byte1, byte2);
         }
+
+        [Fact]
+        public void ToString_ShouldReturnByteArray()
+        {
+            var array = new NbtByteArrayTag(new byte[] { 8, 9, 10 });
+
+            Assert.Equal("[8, 9, 10]", array.ToString());
+        }
     }
 }
