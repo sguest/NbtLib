@@ -4,8 +4,16 @@ using System.IO.Compression;
 
 namespace NbtLib
 {
+    /// <summary>
+    /// Parses NBT data streams into tag collections
+    /// </summary>
     public class NbtParser
     {
+        /// <summary>
+        /// Parse a NBT stream to a collection of tag objects
+        /// </summary>
+        /// <param name="stream">Stream of NBT data, can be GZipped or not</param>
+        /// <returns>NbtCompound tag, possibly with child tags</returns>
         public NbtCompoundTag ParseNbtStream(Stream stream)
         {
             var buffer = new byte[2];

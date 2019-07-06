@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace NbtLib
 {
+    /// <summary>
+    /// Tag representing an array of signed 64-bit integer values
+    /// </summary>
     public struct NbtLongArrayTag : INbtTag<long[]>, IEquatable<NbtLongArrayTag>
     {
         public NbtLongArrayTag(long[] payload)

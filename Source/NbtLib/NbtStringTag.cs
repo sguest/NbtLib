@@ -2,6 +2,9 @@
 
 namespace NbtLib
 {
+    /// <summary>
+    /// Tag representing a string in UTF-8 format
+    /// </summary>
     public struct NbtStringTag : INbtTag<string>, IEquatable<NbtStringTag>
     {
         public NbtStringTag(string payload)

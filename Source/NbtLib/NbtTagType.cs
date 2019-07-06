@@ -1,5 +1,8 @@
 ﻿namespace NbtLib
 {
+    /// <summary>
+    /// Byte representations used to differntiate tags in an NBT stream
+    /// </summary>
     public enum NbtTagType : byte
     {
         End = 0,

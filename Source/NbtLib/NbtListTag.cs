@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace NbtLib
 {
+    /// <summary>
+    /// Tag representing a list of unnamed tags sharing a common type
+    /// </summary>
     public class NbtListTag : INbtTag<IReadOnlyCollection<INbtTag>>, IList<INbtTag>, IEquatable<NbtListTag>
     {
         public NbtListTag(NbtTagType itemType)

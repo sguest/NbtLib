@@ -2,6 +2,9 @@
 
 namespace NbtLib
 {
+    /// <summary>
+    /// Tag representing a 64-bit integer value
+    /// </summary>
     public struct NbtLongTag : INbtTag<long>, IEquatable<NbtLongTag>
     {
         public NbtLongTag(long payload)

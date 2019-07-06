@@ -2,6 +2,10 @@
 
 namespace NbtLib
 {
+    /// <summary>
+    /// Marker tag to represent the end of a compound tag.
+    /// Parsed structures will typically not contain tags of this type as they are a file marker only.
+    /// </summary>
     public struct NbtEndTag : INbtTag, IEquatable<NbtEndTag>
     {
         public NbtTagType TagType => NbtTagType.End;

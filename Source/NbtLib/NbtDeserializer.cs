@@ -7,8 +7,17 @@ using System.Reflection;
 
 namespace NbtLib
 {
+    /// <summary>
+    /// Turns raw NBT data into deserialized objects
+    /// </summary>
     public class NbtDeserializer
     {
+        /// <summary>
+        /// Deserialize a stream of NBT data into an object based on the object's property names. Stream can be GZipped or not.
+        /// </summary>
+        /// <typeparam name="T">Type of object for deserialization target</typeparam>
+        /// <param name="stream">Stream of NBT data, can be GZipped or not</param>
+        /// <returns>Object representation of NBT data</returns>
         public T DeserializeObject<T>(Stream stream)
         {
             var parser = new NbtParser();
@@ -17,6 +26,12 @@ namespace NbtLib
             return DeserializeObject<T>(parsed);
         }
 
+        /// <summary>
+        /// Deserialize a collection of NBT tags into an object based on the object's property names.
+        /// </summary>
+        /// <typeparam name="T">Type of object for deserialization target</typeparam>
+        /// <param name="compoundTag">Root tag containing NBT data</param>
+        /// <returns>Object representation of NBT tags</returns>
         public T DeserializeObject<T>(NbtCompoundTag compoundTag)
         {
             return (T)ParseNbtValue(compoundTag, typeof(T));

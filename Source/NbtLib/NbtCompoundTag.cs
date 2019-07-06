@@ -7,6 +7,9 @@ using System.Text;
 
 namespace NbtLib
 {
+    /// <summary>
+    /// Tag representing a collection of other named tags in a dictionary-like structure
+    /// </summary>
     public class NbtCompoundTag : INbtTag<IReadOnlyDictionary<string, INbtTag>>, IDictionary<string, INbtTag>, IEquatable<NbtCompoundTag>
     {
         public INbtTag this[string key] { get => ChildTags[key]; set => Add(key, value); }

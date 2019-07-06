@@ -4,13 +4,27 @@ using System.IO.Compression;
 
 namespace NbtLib
 {
+    /// <summary>
+    /// Turns NBT tag collections into data streams
+    /// </summary>
     public class NbtWriter
     {
+        /// <summary>
+        /// Creates a GZipped stream of NBT data from a collection of tags. The root tag will have an empty name.
+        /// </summary>
+        /// <param name="rootTag">NBT compound tag to use as the root of the NBT datae</param>
+        /// <returns>GZipped NBT stream</returns>
         public Stream CreateNbtStream(NbtCompoundTag rootTag)
         {
             return CreateNbtStream(rootTag, string.Empty);
         }
 
+        /// <summary>
+        /// Creates a GZipped stream of NBT data from a collection of tags, with a specified name for the root tag.
+        /// </summary>
+        /// <param name="rootTag">NBT compound tag to use as the root of the NBT data</param>
+        /// <param name="rootTagName">Name of the root tag</param>
+        /// <returns>GZipped NBT stream</returns>
         public Stream CreateNbtStream(NbtCompoundTag rootTag, string rootTagName)
         {
             using (var inputStream = CreateUncompressedNbtStream(rootTag, rootTagName))
@@ -27,11 +41,22 @@ namespace NbtLib
             }
         }
 
+        /// <summary>
+        /// Creates an uncompressed (nonstandard) stream of NBT data from a collection of tags. The root tag will have an empty name.
+        /// </summary>
+        /// <param name="rootTag">NBT compound tag to use as the root of the NBT datae</param>
+        /// <returns>Uncompressed NBT stream</returns>
         public Stream CreateUncompressedNbtStream(NbtCompoundTag rootTag)
         {
             return CreateUncompressedNbtStream(rootTag, string.Empty);
         }
 
+        /// <summary>
+        /// Creates an uncompressed (nonstandard) stream of NBT data from a collection of tags, with a specified name for the root tag.
+        /// </summary>
+        /// <param name="rootTag">NBT compound tag to use as the root of the NBT data</param>
+        /// <param name="rootTagName">Name of the root tag</param>
+        /// <returns>Uncompressed NBT stream</returns>
         public Stream CreateUncompressedNbtStream(NbtCompoundTag rootTag, string rootTagName)
         {
             var stream = new MemoryStream();

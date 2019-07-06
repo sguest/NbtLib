@@ -2,12 +2,22 @@
 
 namespace NbtLib
 {
+    /// <summary>
+    /// Provides customization for handing of NBT tags when serializing or deserializing
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class NbtPropertyAttribute : Attribute
     {
+        /// <summary>
+        /// When (de)serializing, this name will be used instead of the property's reflected name
+        /// </summary>
         public string PropertyName { get; set; }
 
         private bool? useArrayTypeImpl = null;
+        /// <summary>
+        /// If true, property will be serialized to an appropriate array tag type if available.
+        /// If false, a List tag will always be used.
+        /// </summary>
         public bool UseArrayType {
             get
             {
@@ -18,7 +28,7 @@ namespace NbtLib
                 useArrayTypeImpl = value;
             }
         }
-        public bool IsUseArrayTypeSpecified
+        internal bool IsUseArrayTypeSpecified
         {
             get
             {
@@ -27,6 +37,9 @@ namespace NbtLib
         }
 
         private bool? emptyListAsEndImpl = null;
+        /// <summary>
+        /// If true, an empty collection serialized to a List will specify an item type of End Tag
+        /// </summary>
         public bool EmptyListAsEnd
         {
             get
@@ -38,7 +51,7 @@ namespace NbtLib
                 emptyListAsEndImpl = value;
             }
         }
-        public bool IsEmptyListAsEndSpecified
+        internal bool IsEmptyListAsEndSpecified
         {
             get
             {

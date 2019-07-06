@@ -2,6 +2,9 @@
 
 namespace NbtLib
 {
+    /// <summary>
+    /// Tag representing a signed byte value
+    /// </summary>
     public struct NbtByteTag : INbtTag<sbyte>, IEquatable<NbtByteTag>
     {
         public NbtByteTag(sbyte payload)

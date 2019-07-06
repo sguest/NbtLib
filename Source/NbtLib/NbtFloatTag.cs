@@ -2,6 +2,9 @@
 
 namespace NbtLib
 {
+    /// <summary>
+    /// Tag representing a single-precision floating point value
+    /// </summary>
     public struct NbtFloatTag : INbtTag<float>, IEquatable<NbtFloatTag>
     {
         public NbtFloatTag(float payload)

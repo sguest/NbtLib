@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace NbtLib
 {
+    /// <summary>
+    /// Tag representing an array of unsigned byte values
+    /// </summary>
     public struct NbtByteArrayTag : INbtTag<byte[]>, IEquatable<NbtByteArrayTag>
     {
         public NbtByteArrayTag(byte[] payload)

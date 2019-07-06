@@ -7,8 +7,14 @@ using System.Reflection;
 
 namespace NbtLib
 {
+    /// <summary>
+    /// Turns objects into serialized NBT representations
+    /// </summary>
     public class NbtSerializer
     {
+        /// <summary>
+        /// Settings to customize NBT serialization
+        /// </summary>
         public NbtSerializerSettings Settings { get; set; }
 
         public NbtSerializer()
@@ -21,6 +27,11 @@ namespace NbtLib
             Settings = settings;
         }
 
+        /// <summary>
+        /// Serialize an object to a representative GZipped NBT stream
+        /// </summary>
+        /// <param name="obj">Object to serialize</param>
+        /// <returns>GZipped NBT stream</returns>
         public Stream SerializeObject(object obj)
         {
             var tag = SerializeObjectToTag(obj);
@@ -29,6 +40,24 @@ namespace NbtLib
             return writer.CreateNbtStream(tag);
         }
 
+        /// <summary>
+        /// Serialize an object to a representative uncompressed (nonstandard) NBT stream
+        /// </summary>
+        /// <param name="obj">Object to serialize</param>
+        /// <returns>Uncompressed NBT stream</returns>
+        public Stream SerializeObjectUncompressed(object obj)
+        {
+            var tag = SerializeObjectToTag(obj);
+
+            var writer = new NbtWriter();
+            return writer.CreateUncompressedNbtStream(tag);
+        }
+
+        /// <summary>
+        /// Serialize an object to a representative set of NBT tags
+        /// </summary>
+        /// <param name="obj">Object to serialize</param>
+        /// <returns>Nbt tag collection</returns>
         public NbtCompoundTag SerializeObjectToTag(object obj)
         {
             return SerializeCompoundTag(obj);

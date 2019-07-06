@@ -2,6 +2,9 @@
 
 namespace NbtLib
 {
+    /// <summary>
+    /// Tag representing a double-precision floating point value
+    /// </summary>
     public struct NbtDoubleTag : INbtTag<double>, IEquatable<NbtDoubleTag>
     {
         public NbtDoubleTag(double payload)

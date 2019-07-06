@@ -2,6 +2,9 @@
 
 namespace NbtLib
 {
+    /// <summary>
+    /// Tag representing a 16-bit signed integer value
+    /// </summary>
     public struct NbtIntTag : INbtTag<int>, IEquatable<NbtIntTag>
     {
         public NbtIntTag(int payload)
