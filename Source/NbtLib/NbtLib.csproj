@@ -13,11 +13,16 @@
     <PackageProjectUrl>https://github.com/sguest/NbtLib</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/sguest/NbtLib</RepositoryUrl>
-    <PackageTags>NBT, Named Binary Tag</PackageTags>
+    <PackageTags>NBT, NamedBinaryTag</PackageTags>
     <NeutralLanguage></NeutralLanguage>
     <Title>NbtLib</Title>
     <RepositoryType>git</RepositoryType>
     <Copyright>©2019 Spencer Guest</Copyright>
+    <Version>1.0.1</Version>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <DocumentationFile>NbtLib.xml</DocumentationFile>
   </PropertyGroup>
 
 </Project>
