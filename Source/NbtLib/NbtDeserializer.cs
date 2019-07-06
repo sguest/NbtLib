@@ -89,9 +89,12 @@ namespace NbtLib
                 {
                     Type itemType = ReflectionHelpers.GetEnumerableGenericType(targetType);
 
-                    var items = listTag.Select(item => ParseNbtValue(item, itemType)).ToList().AsEnumerable();
+                    if(itemType != null)
+                    {
+                        var items = listTag.Select(item => ParseNbtValue(item, itemType)).ToList().AsEnumerable();
 
-                    return MapToCollection(items, itemType, targetType);
+                        return MapToCollection(items, itemType, targetType);
+                    }
                 }
             }
 
@@ -148,7 +151,7 @@ namespace NbtLib
             if (!Attribute.IsDefined(info, typeof(NbtIgnoreAttribute)))
             {
                 var value = ParseNbtValue(childTag, info.PropertyType);
-                if (info.PropertyType.IsAssignableFrom(value.GetType()))
+                if (value != null && info.PropertyType.IsAssignableFrom(value.GetType()))
                 {
                     info.SetValue(parent, value);
                 }
@@ -176,7 +179,7 @@ namespace NbtLib
             foreach (var childTag in compoundTag)
             {
                 var value = ParseNbtValue(childTag.Value, dictionaryTypes[1]);
-                if (dictionaryTypes[1].IsAssignableFrom(value.GetType()))
+                if (value != null && dictionaryTypes[1].IsAssignableFrom(value.GetType()))
                 {
                     targetType.InvokeMember("Add", BindingFlags.InvokeMethod, null, dictionary, new[] { childTag.Key, ParseNbtValue(childTag.Value, dictionaryTypes[1]) });
                 }

@@ -20,6 +20,20 @@ namespace NbtLib.Tests
         }
 
         [Fact]
+        public void DeserializeObject_ShouldHandleNullPropertyValue()
+        {
+            var tag = new NbtCompoundTag
+            {
+                { "StringAbcd", new NbtStringTag(null) }
+            };
+
+            var deserializer = new NbtDeserializer();
+            var obj = deserializer.DeserializeObject<SimpleObject>(tag);
+
+            Assert.Null(obj.StringAbcd);
+        }
+
+        [Fact]
         public void DeserializeObject_ShouldParseToDictionary()
         {
             using (var fileStream = System.IO.File.OpenRead(@"TestData\simple.nbt"))
@@ -30,6 +44,20 @@ namespace NbtLib.Tests
                 Assert.Equal(5, obj["Int 5"]);
                 Assert.Equal("abcd", obj["String abcd"]);
             }
+        }
+
+        [Fact]
+        public void DeserializeObject_ShouldHandleNullDictionaryValue()
+        {
+            var tag = new NbtCompoundTag
+            {
+                { "String", new NbtStringTag(null) }
+            };
+
+            var deserializer = new NbtDeserializer();
+            var obj = deserializer.DeserializeObject<IDictionary<string, object>>(tag);
+
+            Assert.False(obj.ContainsKey("String"));
         }
 
         [Fact]
