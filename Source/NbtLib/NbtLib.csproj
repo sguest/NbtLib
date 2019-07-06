@@ -3,5 +3,21 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
+  
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Spencer Guest</Authors>
+    <Company />
+    <Product />
+    <Description>Library to work with Named Binary Tag (NBT) data</Description>
+    <PackageProjectUrl>https://github.com/sguest/NbtLib</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/sguest/NbtLib</RepositoryUrl>
+    <PackageTags>NBT, Named Binary Tag</PackageTags>
+    <NeutralLanguage></NeutralLanguage>
+    <Title>NbtLib</Title>
+    <RepositoryType>git</RepositoryType>
+    <Copyright>©2019 Spencer Guest</Copyright>
+  </PropertyGroup>
 
 </Project>
