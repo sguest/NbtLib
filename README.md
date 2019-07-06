@@ -85,3 +85,7 @@ Stream outputStream = NbtConvert.SerializeObject(myObject, settings);
 
 All tags return sensible values when calling `ToString()`, and can also return a formatted JSON representation via `ToJsonString()`.
 One of the easiest ways to get a reasonable representation of a NBT file is to parse it to a `NbtCompoundTag` then call `ToJsonString`.
+
+## License
+
+MIT license
