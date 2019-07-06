@@ -4,6 +4,12 @@
 
 NBT specification can be found [here](https://minecraft.gamepedia.com/NBT_format). Somewhat more technical specification [here](http://web.archive.org/web/20110723210920/http://www.minecraft.net/docs/NBT.txt) but it is older and missing a couple of the newer tag types (Int array and long array).
 
+## Installation
+
+Get it from [Nuget](https://www.nuget.org/packages/NbtLib)
+
+`Install-Package NbtLib`
+
 ## Basic usage
 
 ### Raw NBT
