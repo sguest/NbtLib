@@ -40,5 +40,18 @@ namespace NbtLib.Tests
 
             Assert.Equal(listOne, listTwo);
         }
+
+        [Fact]
+        public void ToString_ShouldReturnArrayRepresentation()
+        {
+            var list = new NbtListTag(NbtTagType.String)
+            {
+                new NbtStringTag("abc"),
+                new NbtStringTag("def"),
+                new NbtStringTag("ghi")
+            };
+
+            Assert.Equal("[abc, def, ghi]", list.ToString());
+        }
     }
 }

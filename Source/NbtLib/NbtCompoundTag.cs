@@ -62,5 +62,7 @@ namespace NbtLib
         {
             return -2086293992 + EqualityComparer<IDictionary<string, INbtTag>>.Default.GetHashCode(ChildTags);
         }
+
+        public override string ToString() => "{" + string.Join(", ", ChildTags.Select(kvp => kvp.Key + "=" + kvp.Value.ToString())) + "}";
     }
 }

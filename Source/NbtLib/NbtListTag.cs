@@ -77,5 +77,7 @@ namespace NbtLib
             hashCode = hashCode * -1521134295 + Count.GetHashCode();
             return hashCode;
         }
+
+        public override string ToString() => "[" + string.Join(", ", Payload) + "]";
     }
 }
