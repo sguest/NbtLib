@@ -20,5 +20,13 @@ namespace NbtLib.Tests
 
             Assert.Equal("def", s.ToString());
         }
+
+        [Fact]
+        public void ToJsonString_ShouldIncludeQuotes()
+        {
+            var s = new NbtStringTag("def");
+
+            Assert.Equal("\"def\"", s.ToJsonString());
+        }
     }
 }

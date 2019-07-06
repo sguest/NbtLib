@@ -31,5 +31,7 @@ namespace NbtLib
         public override int GetHashCode() => Payload.GetHashCode();
 
         public override string ToString() => "[" + string.Join(", ", Payload) + "]";
+
+        public string ToJsonString() => ToString();
     }
 }

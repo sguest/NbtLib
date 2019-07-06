@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 
 namespace NbtLib
 {
@@ -64,5 +65,43 @@ namespace NbtLib
         }
 
         public override string ToString() => "{" + string.Join(", ", ChildTags.Select(kvp => kvp.Key + "=" + kvp.Value.ToString())) + "}";
+
+        public string ToJsonString()
+        {
+            return ToJsonString(0);
+        }
+
+        private string ToJsonString(int indentLevel)
+        {
+            var linePrefix = new string(' ', indentLevel + 2);
+            var builder = new StringBuilder();
+            builder.AppendLine("{");
+
+            var count = 1;
+            foreach (var tag in ChildTags)
+            {
+                builder.Append(linePrefix).Append($"\"{tag.Key}\": ");
+
+                if(tag.Value is NbtCompoundTag compoundTag)
+                {
+                    builder.Append(compoundTag.ToJsonString(indentLevel + 2));
+                }
+                else
+                {
+                    builder.Append(tag.Value.ToJsonString());
+                }
+
+                if(count < ChildTags.Count)
+                {
+                    builder.Append(",");
+                    count++;
+                }
+
+                builder.AppendLine();
+            }
+
+            builder.Append(new string(' ', indentLevel)).Append("}");
+            return builder.ToString();
+        }
     }
 }

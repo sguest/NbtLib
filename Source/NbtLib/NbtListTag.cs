@@ -79,5 +79,7 @@ namespace NbtLib
         }
 
         public override string ToString() => "[" + string.Join(", ", Payload) + "]";
+
+        public string ToJsonString() => "[" + string.Join(", ", Payload.Select(i => i.ToJsonString())) + "]";
     }
 }

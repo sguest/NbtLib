@@ -53,5 +53,18 @@ namespace NbtLib.Tests
 
             Assert.Equal("[abc, def, ghi]", list.ToString());
         }
+
+        [Fact]
+        public void ToJsonString_ShouldUseJsonForChildren()
+        {
+            var list = new NbtListTag(NbtTagType.String)
+            {
+                new NbtStringTag("abc"),
+                new NbtStringTag("def"),
+                new NbtStringTag("ghi")
+            };
+
+            Assert.Equal("[\"abc\", \"def\", \"ghi\"]", list.ToJsonString());
+        }
     }
 }

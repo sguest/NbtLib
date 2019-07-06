@@ -19,5 +19,9 @@ namespace NbtLib
         public bool Equals(NbtEndTag other) => true;
 
         public override int GetHashCode() => 0;
+
+        public string ToString() => string.Empty;
+
+        public string ToJsonString() => string.Empty;
     }
 }

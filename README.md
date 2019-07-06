@@ -80,3 +80,8 @@ Stream outputStream = NbtConvert.SerializeObject(myObject, settings);
 `EmptyListAsEnd` (Default: `false`) If true, empty `IEnumerables` that are serialized to lists will have their tag type set to `Empty`
 
 `NamingStrategy` (Default: `DefaultNamingStrategy`) Object implementing `INamingStrategy` that will be used to format tag names. Default implementation leaves names unchanged.
+
+## Formatting
+
+All tags return sensible values when calling `ToString()`, and can also return a formatted JSON representation via `ToJsonString()`.
+One of the easiest ways to get a reasonable representation of a NBT file is to parse it to a `NbtCompoundTag` then call `ToJsonString`.
