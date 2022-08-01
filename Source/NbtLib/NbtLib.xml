@@ -1,0 +1,380 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NbtLib</name>
+    </assembly>
+    <members>
+        <member name="T:NbtLib.DefaultNamingStrategy">
+            <summary>
+            Default naming strategy for property mapping. Leaves property names unchanged
+            </summary>
+        </member>
+        <member name="M:NbtLib.DefaultNamingStrategy.GetTagName(System.String)">
+            <summary>
+            Maps tag name by returning the provided string unchanged
+            </summary>
+            <param name="name">Property name</param>
+            <returns>Provided name unchanged</returns>
+        </member>
+        <member name="T:NbtLib.INamingStrategy">
+            <summary>
+            Provides implementation to serializer on how to map property names to tag names in the output
+            </summary>
+        </member>
+        <member name="M:NbtLib.INamingStrategy.GetTagName(System.String)">
+            <summary>
+            Will be called for each mapped property, the returned value will be used as the tag name
+            </summary>
+            <param name="name">The name of the property being mapped</param>
+            <returns>The tag name to be used</returns>
+        </member>
+        <member name="T:NbtLib.INbtTag">
+            <summary>
+            Representation of a NBT tag.
+            Typically used for collections, individual tags will implement the generic version of this interface.
+            </summary>
+        </member>
+        <member name="P:NbtLib.INbtTag.TagType">
+            <summary>
+            Tag type discriminator byte
+            </summary>
+        </member>
+        <member name="M:NbtLib.INbtTag.ToJsonString">
+            <summary>
+            Get a formatted JSON representation of this tag
+            </summary>
+            <returns>Tag JSON representation</returns>
+        </member>
+        <member name="T:NbtLib.INbtTag`1">
+            <summary>
+            Generic version of a NBT tag
+            </summary>
+            <typeparam name="T">The type of the tag's payload</typeparam>
+        </member>
+        <member name="P:NbtLib.INbtTag`1.Payload">
+            <summary>
+            The tag's payload
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtByteArrayTag">
+            <summary>
+            Tag representing an array of unsigned byte values
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtByteTag">
+            <summary>
+            Tag representing a signed byte value
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtCompoundTag">
+            <summary>
+            Tag representing a collection of other named tags in a dictionary-like structure
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtConvert">
+            <summary>
+            Static helper class for conveniently working with NBT data
+            </summary>
+        </member>
+        <member name="M:NbtLib.NbtConvert.ParseNbtStream(System.IO.Stream)">
+            <summary>
+            Parse a NBT stream to a collection of tag objects
+            </summary>
+            <param name="stream">Stream of NBT data, can be GZipped or not</param>
+            <returns>NbtCompound tag, possibly with child tags</returns>
+        </member>
+        <member name="M:NbtLib.NbtConvert.CreateNbtStream(NbtLib.NbtCompoundTag)">
+            <summary>
+            Creates a GZipped stream of NBT data from a collection of tags. The root tag will have an empty name.
+            </summary>
+            <param name="rootTag">NBT compound tag to use as the root of the NBT datae</param>
+            <returns>GZipped NBT stream</returns>
+        </member>
+        <member name="M:NbtLib.NbtConvert.CreateNbtStream(NbtLib.NbtCompoundTag,System.String)">
+            <summary>
+            Creates a GZipped stream of NBT data from a collection of tags, with a specified name for the root tag.
+            </summary>
+            <param name="rootTag">NBT compound tag to use as the root of the NBT data</param>
+            <param name="rootTagName">Name of the root tag</param>
+            <returns>GZipped NBT stream</returns>
+        </member>
+        <member name="M:NbtLib.NbtConvert.CreateUncompressedNbtStream(NbtLib.NbtCompoundTag)">
+            <summary>
+            Creates an uncompressed (nonstandard) stream of NBT data from a collection of tags. The root tag will have an empty name.
+            </summary>
+            <param name="rootTag">NBT compound tag to use as the root of the NBT datae</param>
+            <returns>Uncompressed NBT stream</returns>
+        </member>
+        <member name="M:NbtLib.NbtConvert.CreateUncompressedNbtStream(NbtLib.NbtCompoundTag,System.String)">
+            <summary>
+            Creates an uncompressed (nonstandard) stream of NBT data from a collection of tags, with a specified name for the root tag.
+            </summary>
+            <param name="rootTag">NBT compound tag to use as the root of the NBT data</param>
+            <param name="rootTagName">Name of the root tag</param>
+            <returns>Uncompressed NBT stream</returns>
+        </member>
+        <member name="M:NbtLib.NbtConvert.DeserializeObject``1(System.IO.Stream)">
+            <summary>
+            Deserialize a stream of NBT data into an object based on the object's property names. Stream can be GZipped or not.
+            </summary>
+            <typeparam name="T">Type of object for deserialization target</typeparam>
+            <param name="stream">Stream of NBT data, can be GZipped or not</param>
+            <returns>Object representation of NBT data</returns>
+        </member>
+        <member name="M:NbtLib.NbtConvert.DeserializeObject``1(NbtLib.NbtCompoundTag)">
+            <summary>
+            Deserialize a collection of NBT tags into an object based on the object's property names.
+            </summary>
+            <typeparam name="T">Type of object for deserialization target</typeparam>
+            <param name="compoundTag">Root tag containing NBT data</param>
+            <returns>Object representation of NBT tags</returns>
+        </member>
+        <member name="M:NbtLib.NbtConvert.SerializeObjectToTag(System.Object)">
+            <summary>
+            Serialize an object to a representative set of NBT tags
+            </summary>
+            <param name="obj">Object to serialize</param>
+            <returns>Nbt tag collection</returns>
+        </member>
+        <member name="M:NbtLib.NbtConvert.SerializeObjectToTag(System.Object,NbtLib.NbtSerializerSettings)">
+            <summary>
+            Serialize an object to a representative set of NBT tags
+            </summary>
+            <param name="obj">Object to serialize</param>
+            <param name="settings">Serialization settings</param>
+            <returns>Nbt tag collection</returns>
+        </member>
+        <member name="M:NbtLib.NbtConvert.SerializeObject(System.Object)">
+            <summary>
+            Serialize an object to a representative GZipped NBT stream
+            </summary>
+            <param name="obj">Object to serialize</param>
+            <returns>GZipped NBT stream</returns>
+        </member>
+        <member name="M:NbtLib.NbtConvert.SerializeObject(System.Object,NbtLib.NbtSerializerSettings)">
+            <summary>
+            Serialize an object to a representative GZipped NBT stream
+            </summary>
+            <param name="obj">Object to serialize</param>
+            <param name="settings">Serialization settings</param>
+            <returns>GZipped NBT stream</returns>
+        </member>
+        <member name="M:NbtLib.NbtConvert.SerializeObjectUncompressed(System.Object)">
+            <summary>
+            Serialize an object to a representative uncompressed (nonstandard) NBT stream
+            </summary>
+            <param name="obj">Object to serialize</param>
+            <returns>Uncompressed NBT stream</returns>
+        </member>
+        <member name="M:NbtLib.NbtConvert.SerializeObjectUncompressed(System.Object,NbtLib.NbtSerializerSettings)">
+            <summary>
+            Serialize an object to a representative uncompressed (nonstandard) NBT stream
+            </summary>
+            <param name="obj">Object to serialize</param>
+            <param name="settings">Serialization settings</param>
+            <returns>Uncompressed NBT stream</returns>
+        </member>
+        <member name="T:NbtLib.NbtDeserializer">
+            <summary>
+            Turns raw NBT data into deserialized objects
+            </summary>
+        </member>
+        <member name="M:NbtLib.NbtDeserializer.DeserializeObject``1(System.IO.Stream)">
+            <summary>
+            Deserialize a stream of NBT data into an object based on the object's property names. Stream can be GZipped or not.
+            </summary>
+            <typeparam name="T">Type of object for deserialization target</typeparam>
+            <param name="stream">Stream of NBT data, can be GZipped or not</param>
+            <returns>Object representation of NBT data</returns>
+        </member>
+        <member name="M:NbtLib.NbtDeserializer.DeserializeObject``1(NbtLib.NbtCompoundTag)">
+            <summary>
+            Deserialize a collection of NBT tags into an object based on the object's property names.
+            </summary>
+            <typeparam name="T">Type of object for deserialization target</typeparam>
+            <param name="compoundTag">Root tag containing NBT data</param>
+            <returns>Object representation of NBT tags</returns>
+        </member>
+        <member name="T:NbtLib.NbtDoubleTag">
+            <summary>
+            Tag representing a double-precision floating point value
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtEndTag">
+            <summary>
+            Marker tag to represent the end of a compound tag.
+            Parsed structures will typically not contain tags of this type as they are a file marker only.
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtFloatTag">
+            <summary>
+            Tag representing a single-precision floating point value
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtIgnoreAttribute">
+            <summary>
+            Specifies that a property should be ignored when serializing or deserializing NBT data
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtIntArrayTag">
+            <summary>
+            Tag representing an array of 16-bit signed integer values
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtIntTag">
+            <summary>
+            Tag representing a 16-bit signed integer value
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtListTag">
+            <summary>
+            Tag representing a list of unnamed tags sharing a common type
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtLongArrayTag">
+            <summary>
+            Tag representing an array of signed 64-bit integer values
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtLongTag">
+            <summary>
+            Tag representing a 64-bit integer value
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtParser">
+            <summary>
+            Parses NBT data streams into tag collections
+            </summary>
+        </member>
+        <member name="M:NbtLib.NbtParser.ParseNbtStream(System.IO.Stream)">
+            <summary>
+            Parse a NBT stream to a collection of tag objects
+            </summary>
+            <param name="stream">Stream of NBT data, can be GZipped or not</param>
+            <returns>NbtCompound tag, possibly with child tags</returns>
+        </member>
+        <member name="T:NbtLib.NbtPropertyAttribute">
+            <summary>
+            Provides customization for handing of NBT tags when serializing or deserializing
+            </summary>
+        </member>
+        <member name="P:NbtLib.NbtPropertyAttribute.PropertyName">
+            <summary>
+            When (de)serializing, this name will be used instead of the property's reflected name
+            </summary>
+        </member>
+        <member name="P:NbtLib.NbtPropertyAttribute.UseArrayType">
+            <summary>
+            If true, property will be serialized to an appropriate array tag type if available.
+            If false, a List tag will always be used.
+            </summary>
+        </member>
+        <member name="P:NbtLib.NbtPropertyAttribute.EmptyListAsEnd">
+            <summary>
+            If true, an empty collection serialized to a List will specify an item type of End Tag
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtSerializer">
+            <summary>
+            Turns objects into serialized NBT representations
+            </summary>
+        </member>
+        <member name="P:NbtLib.NbtSerializer.Settings">
+            <summary>
+            Settings to customize NBT serialization
+            </summary>
+        </member>
+        <member name="M:NbtLib.NbtSerializer.SerializeObject(System.Object)">
+            <summary>
+            Serialize an object to a representative GZipped NBT stream
+            </summary>
+            <param name="obj">Object to serialize</param>
+            <returns>GZipped NBT stream</returns>
+        </member>
+        <member name="M:NbtLib.NbtSerializer.SerializeObjectUncompressed(System.Object)">
+            <summary>
+            Serialize an object to a representative uncompressed (nonstandard) NBT stream
+            </summary>
+            <param name="obj">Object to serialize</param>
+            <returns>Uncompressed NBT stream</returns>
+        </member>
+        <member name="M:NbtLib.NbtSerializer.SerializeObjectToTag(System.Object)">
+            <summary>
+            Serialize an object to a representative set of NBT tags
+            </summary>
+            <param name="obj">Object to serialize</param>
+            <returns>Nbt tag collection</returns>
+        </member>
+        <member name="T:NbtLib.NbtSerializerSettings">
+            <summary>
+            Settings to customize NBT Serialization
+            </summary>
+        </member>
+        <member name="P:NbtLib.NbtSerializerSettings.NamingStrategy">
+            <summary>
+            Will be called for each serialized property to determine the tag name
+            </summary>
+        </member>
+        <member name="P:NbtLib.NbtSerializerSettings.UseArrayTypes">
+            <summary>
+            If true, property will be serialized to an appropriate array tag type if available.
+            If false, a List tag will always be used.
+            </summary>
+        </member>
+        <member name="P:NbtLib.NbtSerializerSettings.EmptyListAsEnd">
+            <summary>
+            If true, an empty collection serialized to a List will specify an item type of End Tag
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtShortTag">
+            <summary>
+            Tag representing a signed 16-bit integer
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtStringTag">
+            <summary>
+            Tag representing a string in UTF-8 format
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtTagType">
+            <summary>
+            Byte representations used to differntiate tags in an NBT stream
+            </summary>
+        </member>
+        <member name="T:NbtLib.NbtWriter">
+            <summary>
+            Turns NBT tag collections into data streams
+            </summary>
+        </member>
+        <member name="M:NbtLib.NbtWriter.CreateNbtStream(NbtLib.NbtCompoundTag)">
+            <summary>
+            Creates a GZipped stream of NBT data from a collection of tags. The root tag will have an empty name.
+            </summary>
+            <param name="rootTag">NBT compound tag to use as the root of the NBT datae</param>
+            <returns>GZipped NBT stream</returns>
+        </member>
+        <member name="M:NbtLib.NbtWriter.CreateNbtStream(NbtLib.NbtCompoundTag,System.String)">
+            <summary>
+            Creates a GZipped stream of NBT data from a collection of tags, with a specified name for the root tag.
+            </summary>
+            <param name="rootTag">NBT compound tag to use as the root of the NBT data</param>
+            <param name="rootTagName">Name of the root tag</param>
+            <returns>GZipped NBT stream</returns>
+        </member>
+        <member name="M:NbtLib.NbtWriter.CreateUncompressedNbtStream(NbtLib.NbtCompoundTag)">
+            <summary>
+            Creates an uncompressed (nonstandard) stream of NBT data from a collection of tags. The root tag will have an empty name.
+            </summary>
+            <param name="rootTag">NBT compound tag to use as the root of the NBT datae</param>
+            <returns>Uncompressed NBT stream</returns>
+        </member>
+        <member name="M:NbtLib.NbtWriter.CreateUncompressedNbtStream(NbtLib.NbtCompoundTag,System.String)">
+            <summary>
+            Creates an uncompressed (nonstandard) stream of NBT data from a collection of tags, with a specified name for the root tag.
+            </summary>
+            <param name="rootTag">NBT compound tag to use as the root of the NBT data</param>
+            <param name="rootTagName">Name of the root tag</param>
+            <returns>Uncompressed NBT stream</returns>
+        </member>
+    </members>
+</doc>
