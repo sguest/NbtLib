@@ -1,28 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
-  
-  <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Authors>Spencer Guest</Authors>
-    <Company />
-    <Product />
-    <Description>Library to work with Named Binary Tag (NBT) data</Description>
-    <PackageProjectUrl>https://github.com/sguest/NbtLib</PackageProjectUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/sguest/NbtLib</RepositoryUrl>
-    <PackageTags>NBT, NamedBinaryTag</PackageTags>
-    <NeutralLanguage></NeutralLanguage>
-    <Title>NbtLib</Title>
-    <RepositoryType>git</RepositoryType>
-    <Copyright>©2019 Spencer Guest</Copyright>
-    <Version>1.0.1</Version>
-  </PropertyGroup>
-  
-  <PropertyGroup>
-    <DocumentationFile>NbtLib.xml</DocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Authors>Spencer Guest</Authors>
+		<Company />
+		<Product />
+		<Description>Library to work with Named Binary Tag (NBT) data</Description>
+		<PackageProjectUrl>https://github.com/sguest/NbtLib</PackageProjectUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryUrl>https://github.com/sguest/NbtLib</RepositoryUrl>
+		<PackageTags>NBT, NamedBinaryTag</PackageTags>
+		<NeutralLanguage></NeutralLanguage>
+		<Title>NbtLib</Title>
+		<RepositoryType>git</RepositoryType>
+		<Copyright>©2019 Spencer Guest</Copyright>
+		<Version>1.0.1</Version>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<DocumentationFile>NbtLib.xml</DocumentationFile>
+	</PropertyGroup>
 
 </Project>
